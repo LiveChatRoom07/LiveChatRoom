@@ -1,8 +1,9 @@
 import React from 'react'
+import './Index.css'
 
 function Index() {
   return (
-    <div>
+    <div className='box'>
         <h2>Welcome</h2>
         <div className='name'>
             {/* <input type='text'> */}
