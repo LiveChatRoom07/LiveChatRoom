@@ -6,9 +6,10 @@ function Index() {
     <div className='box'>
         <h2>Welcome</h2>
         <div className='name'>
-            {/* <input type='text'> */}
-            {/* </input> */}
-
+            <Input label="name" placeholder="xyz@00" name="name"/>
+            <Input label="email" type="email" name="email"/>
+            <Input label="password" type="password" name="password"/>
+            <Button/>
         </div>
     </div>
   )
