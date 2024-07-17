@@ -1,8 +1,13 @@
 import React from 'react'
+import './Input.css'
 
-function Input() {
+const Input = ({label = '',type='text',placeholder='', name=''}) => {
   return (
-    <div>Input</div>
+    <div className='sub-box'>
+      <label htmlFor={name}>{label}</label>
+      <input type={type} id={name} placeholder={placeholder} required className='input' />
+      
+    </div>
   )
 }
 
