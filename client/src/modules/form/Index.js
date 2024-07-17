@@ -1,5 +1,7 @@
 import React from 'react'
-import './Index.css'
+import './Index.css';
+import Input from '../components/Input.js';
+import Button from '../components/Buttons/Button.js';
 
 function Index() {
   return (
