@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import Index from './modules/form/Index.js';
+import Index from './modules/form/index.js';
 import './App.css';
 
 function App() {
