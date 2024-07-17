@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import './Index.css';
-import Input from '../../components/Input/Input.js'
-import Button from '../../components/Buttons/Button.js';
-=======
->>>>>>> 3f1908eb9bfe5f0a7f47601447cb32392abdcce0
 
 import React, { useState } from 'react'
 import Input from '../../components/Input.js'
