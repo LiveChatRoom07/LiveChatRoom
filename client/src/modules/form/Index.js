@@ -5,7 +5,7 @@ import Button from '../../components/Buttons/Button.js'
 import './Index.css'
 
 
-function Index( {isSignInPage=true} ){
+function Index( {isSignInPage=false} ){
 
   const[data, setData] = useState({
     ...(isSignInPage && {UserName:''}),

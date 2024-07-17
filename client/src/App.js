@@ -1,13 +1,12 @@
 import Index from './modules/form/Index.js';
+import Login from './modules/form/Login.js';
 import './App.css';
+import ChangePassword from './modules/form/ChangePassword.js';
 
 function App() {
   return (
     <div className="App" >
-      <header className="App-header">
-        <Index/>
-        <hr/>
-      </header>
+      <ChangePassword/>
     </div>
   );
 }

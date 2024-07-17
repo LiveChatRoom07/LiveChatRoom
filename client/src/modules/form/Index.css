@@ -40,3 +40,8 @@
     color: var(--secondary);
     text-decoration: underline;
 }
+
+.box button{
+    width: 50%;
+    margin-left: 70px;
+}
