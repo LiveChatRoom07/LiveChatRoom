@@ -5,14 +5,15 @@
   --primary: white;
   --secondary: #0466c8;
   --text: black;
-  --diable: #F1F2F3;
+  --disable: #F1F2F3;
 }
  
  .App {
   display: flex;
   justify-content: center;
+  align-items: center;
   font-family: 'Kumbh Sans';
-  background-color: aqua;
+  background-color: var(--disable);
   width: 100%;
-  height: 700px;
+  height: 100vh;
 }

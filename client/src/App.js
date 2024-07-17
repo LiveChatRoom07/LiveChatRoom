@@ -1,5 +1,4 @@
-
-import Index from './modules/form/index.js';
+import Index from './modules/form/Index.js';
 import './App.css';
 
 function App() {
