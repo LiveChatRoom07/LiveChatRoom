@@ -1,0 +1,281 @@
+/* for entire page of dashboard */
+.dashobord-content{
+    width: 100vw;
+    display: flex;
+}
+/* for profile and people in touch page */
+.first{
+    background-color: whitesmoke;
+    width: 25vw;
+    height: 100vh;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+/* for my profile */
+.myprofile{
+    max-width: 25vw;
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.75);
+}
+.profilepic{
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+.profilepic img{
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+}
+.profileinfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 20px;
+}
+.username{
+    margin: 0;
+    font-size: 1.75rem;
+    font-family: 'kumbh-sans', sans-serif;
+    margin-bottom: 5px;
+}
+.bio{
+    margin: 0;
+    font-size: 1rem;
+    text-wrap: wrap;
+    font-family: 'kumbh-sans', sans-serif;
+    font-weight: 500;
+}
+
+/* for connections portion */
+.myconnections{
+    /* height: ; */
+    display: flex;
+    flex-direction: column;
+    /* overflow-y: scroll;
+    scrollbar-width: thin; */
+}
+.heading h1{
+    margin-top: 30px;
+    font-size: 1.25rem;
+    font-family: 'kumbh-sans', sans-serif;
+    margin-left: 30px;
+    color: var(--secondary);
+    font-weight: 500;
+}
+/* for connection-list */
+.connection{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px 0;
+    padding-left: 50px;
+    cursor: pointer;
+}
+.connection:hover{
+    background-color: var(--disable);
+}
+.connection-pic{
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+
+}
+.connection-pic img{
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+}
+.connection-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 25px;
+}
+.connection-username{
+    margin: 0;
+    font-size: 1.25rem;
+    font-family: 'kumbh-sans', sans-serif;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.connection-message{
+    margin: 0;
+    font-size: 0.75rem;
+    font-family: 'kumbh-sans', sans-serif;
+    color: var(--text);
+}
+/* for chat page */
+.second{
+    background-color: var(--disable);
+    width: 50vw;
+    height: 100vh;
+}
+/* for heading of chat page */
+.chat-page{
+    width: 50vw;
+    height: 100vh;
+}
+.chat-header{
+    height: 6rem;
+    background-color: var(--secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.leftcontent{
+    height: 6rem;
+    background-color: var(--secondary);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 50px;
+}
+.chat-pic{
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+.chat-pic img{
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+}
+.chat-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 25px;
+}
+.chat-username{
+    margin: 0;
+    font-size: 1.25rem;
+    font-family: 'kumbh-sans', sans-serif;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--primary);
+}
+.chat-status{
+    margin: 0;
+    font-size: 0.75rem;
+    font-family: 'kumbh-sans', sans-serif;
+    color: var(--primary);
+}
+.mail-forward{
+    height: 40px;
+    width: 40px;
+    margin-right: 50px;
+    cursor: pointer;
+}
+.mail-forward a{
+    height: 40px;
+    width: 40px;
+    text-decoration: none;
+    color: var(--primary);
+}
+.mail-forward a img{
+    height: 40px;
+    width: 40px;
+}
+/* for chat messages */
+.chat-body{
+    height: 80vh;
+    width: 50vw;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    background-image: url(../../assets/bgtemp.jpg);
+    display: flex;
+    flex-direction: column;
+}
+.chat> div{
+    display: flex;
+}
+.chat .sent{
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.chat .received{
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.sent{
+    margin-right: 25px;
+    margin-top: 15px;
+}
+.sent p{
+    width: 18rem;
+    margin: 0;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: 'kumbh-sans', sans-serif;
+    color: var(--text);
+    background-color: var(--primary);
+    border-radius: 10px 10px 0px 10px;
+}
+.received{
+    margin-left: 25px;
+    margin-top: 15px;
+}
+.received p{
+    width: 18rem;
+    margin: 0;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: 'kumbh-sans', sans-serif;
+    color: var(--primary);
+    background-color: var(--secondary);
+    border-radius: 0px 10px 10px 10px;
+}
+/* for type messages */
+.type-message{
+    height: 6vh;
+    width: 50vw;
+    padding: 10 0%;
+    background-color: var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.type-message input[type="text"]{
+    height: 80%;
+    width: 70%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-family: 'kumbh-sans', sans-serif;
+    background-color: var(--disable);
+    padding-left: 20px;
+}
+.type-message input[type="text"]::placeholder{
+    font-size: 1rem;
+    font-family: 'kumbh-sans', sans-serif;
+}
+.type-message input[type="submit"]{
+    display: flex;
+    height: 80%;
+    width: 10%;
+    background-color: var(--secondary);
+    color: var(--primary);
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-family: 'kumbh-sans', sans-serif;
+    cursor: pointer;
+}
+/* for users you may connect with page */
+.third{
+    background-color: rgb(90, 128, 90);
+    width: 25vw;
+    height: 100vh;
+}
