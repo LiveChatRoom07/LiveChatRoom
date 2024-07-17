@@ -1,8 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&family=Merienda:wght@300..900&display=swap');
+
+:root{
+  --primary: white;
+  --secondary: #0466c8;
+  --text: black;
+  --diable: #F1F2F3;
+}
+ 
  .App {
   display: flex;
   justify-content: center;
   /* align-content: center; */
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Kumbh Sans';
   background-color: aqua;
   width: 100%;
   height: 700px;

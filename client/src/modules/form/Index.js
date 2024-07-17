@@ -1,6 +1,7 @@
 import React from 'react'
 import './Index.css'
 import Input from '../../components/Input'
+import Button from '../../components/Buttons/Button'
 
 function Index() {
   return (
@@ -10,6 +11,8 @@ function Index() {
             <Input label="name" placeholder="xyz@00"/>
             <Input label="email" type="email"/>
             <Input label="password" type="password"/>
+            <Button/>
+            
         </div>
     </div>
   )
