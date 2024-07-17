@@ -11,9 +11,11 @@
  .App {
   display: flex;
   justify-content: center;
-  /* align-content: center; */
+  align-items: center;
   font-family: 'Kumbh Sans';
-  background-color: aqua;
+  /* background-color: var(--disable); */
   width: 100%;
   height: 100vh;
+  background-image: url("https://cdn.wallpapersafari.com/27/32/jt4AoG.jpg");
+  background-size: contain;
 }

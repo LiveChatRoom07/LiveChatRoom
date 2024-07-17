@@ -1,9 +1,10 @@
 import React from 'react'
+import './Button.css'
 
-const Button = ({label='button', type='button'}) => {
+const Button = ({label='button', type='button',disabled=false}) => {
   return (
     <div>
-        <button className='button'>
+        <button type={type} className='signin-button' disabled={disabled} >
            {label}
         </button>
     </div>
