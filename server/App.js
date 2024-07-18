@@ -29,7 +29,7 @@ app.post('/api/register', async(req, res, next) => {
                 res.status(400).json({msg: 'User already exists'});
             }
             else if(isAlreadyExistuser){
-                res.status(400).json({msg: 'Username already exists'});
+                res.status(400).json({msg: 'username already exists'});
             }
             else{
                 const newUser= new Users({username, email});
@@ -40,9 +40,7 @@ app.post('/api/register', async(req, res, next) => {
                 })
                 return res.status(200).json({msg: 'User registered successfully'});
             }
-
         }
-
     } catch (error) {
         
     }
