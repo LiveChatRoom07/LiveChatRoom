@@ -1,3 +1,5 @@
+
+/* Main container */
 .box1{
     width: 800px;
     height: 300px;
@@ -10,27 +12,32 @@
     align-items: center;
 }
 
+/* container of taking email */
 .email{
     display: flex;
     align-items: center;
     /* justify-content: space-between; */
 }
 
+/* container of otp input feild */
 .otp{
     display: flex;
     width: 100px;
 }
 
+/* Generate-otp btn */
 .email button{
     width: 100%;
     height: 100%;
     margin-left: 20px;
 }
 
+/* otp input feild */
 .otp input{
     width: 25px;
 }
 
+/* submit button */
 .otp button{
     width: 100%;
     height: 50%;

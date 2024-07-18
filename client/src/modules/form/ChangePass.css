@@ -1,3 +1,5 @@
+
+/* main container */
 .box2{
     width: 600px;
     height: 400px;
@@ -10,6 +12,7 @@
     align-items: center;
 }
 
+/* submit button */
 .box2 button{
     width: 70%;
     margin-left: 40px;
