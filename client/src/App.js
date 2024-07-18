@@ -3,7 +3,7 @@ import './App.css';
 import ChangePassword from './modules/form/ChangePassword.js';
 import Dashboard from './modules/dashboard/Dashboard.js'
 import Index from './modules/form/Index.js';
-import { Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 
 function App() {
