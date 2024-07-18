@@ -8,6 +8,8 @@
   --disable: #F1F2F3;
 }
  
+/* Home page */
+
  .App {
   display: flex;
   justify-content: center;
