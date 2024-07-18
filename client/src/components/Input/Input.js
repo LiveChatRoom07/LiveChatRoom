@@ -15,4 +15,4 @@ const Input = ({label = '',type='text',placeholder='', name='',isrequired=true, 
   )
 }
 
-export default Input
+export default Input;
