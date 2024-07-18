@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import Input from '../../components/Input/Input.js'
 import Button from '../../components/Buttons/Button.js'
 import './Index.css'
+import { useNavigate } from 'react-router-dom';
 
 // isSignInPage = true for LogIn page
 function Index( {isSignInPage=false} ){
 
+  const navigate = useNavigate()
 
   //store input values
   const[data, setData] = useState({
@@ -50,7 +52,7 @@ function Index( {isSignInPage=false} ){
         {/* alternative page check */}
         <div className='signin-text'> 
           {isSignInPage ? "Didn't have an account? " : "Already have an account? "} 
-          <span className='signin'>{isSignInPage?'Sign up':'Sign in'}</span>
+          <span className='signin' onClick={() => navigate(`/user/${isSignInPage ? 'sign_up' : 'sign_in'}`)} >{isSignInPage?'Sign up':'Sign in'}</span>
         </div>
 
     </div>
