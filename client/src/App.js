@@ -1,6 +1,10 @@
 import React from 'react';
 import './App.css';
+<<<<<<< HEAD
 import Dashboard from './modules/Dashboard/Dashboard.js';
+=======
+import Dashboard from './modules/Dashboard/Dashboard';
+>>>>>>> 2f4a85cc2c17af0a822929282efcdfa5cac85bc2
 import Form from './modules/form/Index'
 import { Route, Routes, Navigate } from 'react-router-dom';
 
