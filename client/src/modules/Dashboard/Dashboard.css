@@ -119,6 +119,7 @@
     background-color: var(--disable);
     width: 50vw;
     height: 100vh;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
 /* for heading of chat page */
 .chat-page{
@@ -290,7 +291,7 @@
 }
 /* for users you may connect with page */
 .third{
-    background-color: rgb(90, 128, 90);
+    background-color: whitesmoke;
     width: 25vw;
     height: 100vh;
 }
