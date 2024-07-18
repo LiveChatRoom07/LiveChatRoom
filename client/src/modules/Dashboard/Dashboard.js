@@ -1,8 +1,9 @@
 import React from 'react';
 import './Dashboard.css';
 import mail from '../../assets/mailto.png';
-// import send from '../../assets/send.png';
+import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
+import Input from '../../components/Input/Input';
 
 export const Dashboard = () => {
     const connections= [
@@ -95,21 +96,19 @@ export const Dashboard = () => {
                 <div className='chat-body'>
                     <div className='chat'>
                         <div className='sent'>
-                            <p>hello, How are ?</p>
+                            <p>hello, How are u?</p>
                         </div>
                         <div className='received'>
-                            <p>Hey! How are you? I love you so..</p>
+                            <p>Hey! How are you? </p>
                         </div>
                         <div className='received'>
-                            <p>Hey! How are you? I love you so.. i love you so..</p>
+                            <p> I am GOOD!!</p>
                         </div>
                     </div>
                 </div>
                 <div className='type-message'>
-                    <input type='text' placeholder='Type a message...' />
-                    <input type='submit' value='Send'>
-                        {/* <img src={send} alt='sendmsg'/> */}
-                    </input>
+                    <Input type='text' placeholder='Type a message...'/>
+                    <button className='sendmsg' type='submit'><img src={send} alt='send button'/></button>
                 </div>
             </div>
         </div>
