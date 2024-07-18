@@ -1,29 +1,21 @@
 const express = require('express');
-
-const app = express();
-
-//Connect DB
+const bcryptjs = require('bcryptjs');
 
 require('./db/connection');
+const Users = require('./Models/Users');
 
-
-//Import Files
-
-const Users = require('./Models/Users')
+const app = express();
 
 const port = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
-//Routes
-
 app.get('/', (req, res) => {
   res.send('Hello World');
-});
+})
 
-app.post('api/register', (req, res) => {
+app.post('/api/register', async(req, res, next) => {
     try {
         const { username, email, password } = req.body;
 
@@ -31,8 +23,8 @@ app.post('api/register', (req, res) => {
             res.status(400).json({msg: 'Please enter all fields'});
         }
         else{
-            const isAlreadyExist = await User.findOne({email});
-            const isAlreadyExistuser = await User.findOne({username});
+            const isAlreadyExist = await Users.findOne({email});
+            const isAlreadyExistuser = await Users.findOne({username});
             if(isAlreadyExist){
                 res.status(400).json({msg: 'User already exists'});
             }
@@ -40,7 +32,13 @@ app.post('api/register', (req, res) => {
                 res.status(400).json({msg: 'Username already exists'});
             }
             else{
-                const newUser= new User({username, email, password});
+                const newUser= new Users({username, email});
+                bcryptjs.hash(password, 10, (err, hashedpassword) => {
+                    newUser.set('password', hashedpassword);
+                    newUser.save();
+                    next();
+                })
+                return res.status(200).json({msg: 'User registered successfully'});
             }
 
         }
