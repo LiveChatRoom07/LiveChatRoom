@@ -1,21 +1,33 @@
+
+//import important
 const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+//connect DB
 require('./db/connection');
+
+
+//import files
 const Users = require('./Models/Users');
+const messages = require('./Models/messages');
+const conversations = require('./Models/conversations');
 
+//app use
 const app = express();
-
-const port = process.env.PORT || 8000;
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const port = process.env.PORT || 8000;
+
+
+//Routs
 app.get('/', (req, res) => {
   res.send('Hello World');
 })
 
+//set user data in DB while register_Register Route
 app.post('/api/register', async(req, res, next) => {
     try {
         const { username, email, password } = req.body;
@@ -49,6 +61,7 @@ app.post('/api/register', async(req, res, next) => {
     }
 })
 
+//update userdata in DB while login_Login Route
 app.post('/api/login', async(req, res, next) => {
     try {
         const { username, password } = req.body;
@@ -91,6 +104,7 @@ app.post('/api/login', async(req, res, next) => {
         console.log('error:', error);
     }
 })
+
 
 app.listen(port, () => {
   console.log('Server is running on port' + port);
