@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Dashboard.css';
 import mail from '../../assets/mailto.png';
 import send from '../../assets/send.png';
@@ -6,6 +6,10 @@ import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
 
 export const Dashboard = () => {
+    const [msgsent, setMsgSent] = useState('');
+    const handlemsg = (e) => {
+        setMsgSent(e.target.value);
+    };
     const connections= [
         {
             uname: 'Tanjiro',
@@ -107,7 +111,7 @@ export const Dashboard = () => {
                     </div>
                 </div>
                 <div className='type-message'>
-                    <Input type='text' placeholder='Type a message...'/>
+                    <Input type='text' placeholder='Type a message...' isrequired='false' length='500' value={msgsent} onChange={handlemsg} />
                     <button className='sendmsg' type='submit'><img src={send} alt='send button'/></button>
                 </div>
             </div>
