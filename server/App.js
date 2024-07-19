@@ -11,8 +11,8 @@ require('./db/connection');
 
 //import files
 const Users = require('./Models/Users');
-const messages = require('./Models/messages');
-const conversations = require('./Models/conversations');
+const messages = require('./Models/Messages');
+const conversations = require('./Models/Conversations');
 
 //app use
 const app = express();
@@ -103,6 +103,33 @@ app.post('/api/login', async(req, res, next) => {
     }
 })
 
+app.post('/api/conversation', async(req, res) => {
+    try {
+        const { senderId, receiverId } = req.body;
+        const newConversation = new conversations({member: [senderId, receiverId]});
+        await newConversation.save();
+        res.status(200).json({msg: 'Conversation created successfully'});
+    } catch (error) {
+        console.log(error, 'Error');
+    }
+})
+
+app.get('/api/conversation/:userId', async(req, res) => {
+    try {
+        const userId = req.params.userId;
+        const convo = await conversations.find({member: { $in: [userId]}});
+        const convoData = Promise.all(convo.map(async(conversation) => {
+            const receiverId = conversation.member.find((membr) => membr !== userId);
+            const user= await Users.findById(receiverId);
+            return { user: { receiverId: user._id, email: user.email, username: user.username }, conversationId: conversation._id }
+        }))
+
+        res.status(200).json(await convoData);
+
+    } catch (error) {
+        console.log(error, 'Error');  
+    }
+})
 
 app.listen(port, () => {
   console.log('Server is running on port' + port);

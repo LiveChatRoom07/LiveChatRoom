@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 const messageSchema = mongoose.Schema({
     conversationId:{
         type: String,
-        required: true,
+        // required: true,
     },
     senderID:{
         type: String,
-        required: true,
+        // required: true,
     },
     message:{
         type: String
