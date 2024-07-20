@@ -103,6 +103,8 @@ app.post('/api/login', async(req, res, next) => {
     }
 })
 
+
+//conversation Routes_store convo_id
 app.post('/api/conversation', async(req, res) => {
     try {
         const { senderId, receiverId } = req.body;
@@ -114,6 +116,7 @@ app.post('/api/conversation', async(req, res) => {
     }
 })
 
+//get all user details in chatlist 
 app.get('/api/conversation/:userId', async(req, res) => {
     try {
         const userId = req.params.userId;
@@ -128,6 +131,30 @@ app.get('/api/conversation/:userId', async(req, res) => {
 
     } catch (error) {
         console.log(error, 'Error');  
+    }
+})
+
+
+//Message Routes
+app.post('/api/messages', async(req, res) => {
+    try {
+        const {conversationId, senderId, message } = req.body;
+        const newMessage = new messages({conversationId, senderId, message});
+        await newMessage.save();
+        res.status(200).send('Message sent successfully');
+    }catch( error ){
+        console.log(error, 'Error');
+    }
+})
+
+app.get('/api/messages/conversationId', async(req, res) => {
+    try{
+
+        const conversationId = req.params.conversationId;
+        const msg = await messages.find( {conversationId} );
+
+    }catch( error ){
+        console.log(error, 'Error');
     }
 })
 
