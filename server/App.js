@@ -3,7 +3,7 @@
 const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const cors = require('cors');
 
 //connect DB
 require('./db/connection');
@@ -18,7 +18,7 @@ const conversations = require('./Models/Conversations');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cors());
 const port = process.env.PORT || 8000;
 
 
