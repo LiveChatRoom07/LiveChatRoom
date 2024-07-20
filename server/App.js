@@ -179,7 +179,7 @@ app.post('/api/messages', async(req, res) => {
             const newMessage = new messages({conversationId: newConversation._id, senderId, message});
             await newMessage.save();
             return res.status(200).send('Message sent successfully');
-        }else{
+        }else if(!conversationId && !receiverId){
             return res.status(400).send("fill all required feilds");
         }
 
