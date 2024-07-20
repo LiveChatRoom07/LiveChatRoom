@@ -11,7 +11,7 @@ require('./db/connection');
 
 //import files
 const Users = require('./Models/Users');
-const Messages = require('./Models/Messages');
+const messages = require('./Models/Messages');
 const conversations = require('./Models/Conversations');
 
 //app use
