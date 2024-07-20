@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import Input from '../../components/Input/Input.js'
 import Button from '../../components/Buttons/Button.js'
@@ -17,7 +16,28 @@ function Index( {isSignInPage=false} ){
     Password:''
   })
 
-  // console.log('data :>>', data); //print data
+
+  const handleSubmit = async(e) => {
+    console.log('data :>>', data); //print data
+    e.preventDefault();//prevent page reload
+    const res = await fetch(`http://localhost:8000/api/${isSignInPage ? 'login' : 'register'}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    if(res.status === 400) {
+            alert('Invalid credentials')
+        }else{
+            const resData = await res.json()
+            if(resData.token) {
+                localStorage.setItem('user:token', resData.token)
+                localStorage.setItem('user:detail', JSON.stringify(resData.user))
+                navigate('/')
+            }
+        }
+  }
 
   return (
     <div className='box'>
@@ -30,7 +50,7 @@ function Index( {isSignInPage=false} ){
           {isSignInPage ? 'Sign in to get explored.!' : 'Sign up to get started.!'}
         </div>
 
-        <form onSubmit={() => console.log("Submited!")}>
+        <form onSubmit={(e) => handleSubmit(e) }>
 
           {/* //input name */}
           <Input label="User Name" placeholder="Enter your Name" name="name" isrequired="true" length="15" value={data.UserName} onChange={(e) => setData({...data, UserName: e.target.value}) } />

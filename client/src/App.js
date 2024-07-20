@@ -7,10 +7,10 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 
 // Routing Protection
 
-const ProtectedRoute = ({children}) => {
-  const isLoggedIn = localStorage.getItem('user:token') != null || true
+const ProtectedRoute = ({children, auth=false}) => {
+  const isLoggedIn = localStorage.getItem('user:token') != null || false
 
-  if(!isLoggedIn) {
+  if(!isLoggedIn && auth) {
     return <Navigate to={'/user/sign_in'}/>
   }
   else if(isLoggedIn && ['/user/sign_in', '/user/sign_up'].includes(window.location.pathname)){
@@ -29,7 +29,7 @@ function App() {
       <Routes>
 
         <Route path="/" element={
-          <ProtectedRoute>
+          <ProtectedRoute auth={true}>
             <Dashboard />
           </ProtectedRoute>
         } />
