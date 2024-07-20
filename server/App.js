@@ -11,7 +11,7 @@ require('./db/connection');
 
 //import files
 const Users = require('./Models/Users');
-const messages = require('./Models/Messages');
+const Messages = require('./Models/Messages');
 const conversations = require('./Models/Conversations');
 
 //app use
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 const port = process.env.PORT || 8000;
 
 
-//Routs
+//Routes
 app.get('/', (req, res) => {
   res.send('Hello World');
 })
