@@ -28,15 +28,15 @@ function Index( {isSignInPage=false} ){
       body: JSON.stringify(data)
     })
     if(res.status === 400) {
-            alert('Invalid credentials')
-        }else{
-            const resData = await res.json()
-            if(resData.token) {
-                localStorage.setItem('user:token', resData.token)
-                localStorage.setItem('user:detail', JSON.stringify(resData.user))
-                navigate('/')
-            }
-        }
+      alert('Invalid credentials')
+    }else{
+      const resData = await res.json()
+      if(resData.token) {
+        localStorage.setItem('user:token', resData.token)
+        localStorage.setItem('user:detail', JSON.stringify(resData.user))
+        navigate('/')
+      }
+    }
   }
 
   return (
