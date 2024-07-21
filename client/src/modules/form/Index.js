@@ -45,13 +45,13 @@ function Index( {isSignInPage=true} ){
         <form method='POST' onSubmit={(e) => handleSubmit(e) }>
 
           {/* //input name */}
-          <Input label="User Name" placeholder="Enter your Name" name="name" isrequired="true" length="15" value={data.UserName} onChange={(e) => setData({...data, UserName: e.target.value}) } />
+          <Input label="User Name" placeholder="Enter your Name" name="name" isrequired="true" length="15" value={data.username} onChange={(e) => setData({...data, username: e.target.value}) } />
 
           {/* input email */}
-          {!isSignInPage && <Input label="E-mail" type="email" name="email" placeholder="Enter your Email Address" isrequired="true" value={data.Email} onChange={(e) => setData({...data, Email: e.target.value}) }/>}
+          {!isSignInPage && <Input label="E-mail" type="email" name="email" placeholder="Enter your Email Address" isrequired="true" value={data.email} onChange={(e) => setData({...data, email: e.target.value}) }/>}
 
           {/* input password */}
-          <Input label="Password" type="password" name="password" placeholder="Enter Password" isrequired="true" value={data.Password} onChange={(e) => setData({...data, Password: e.target.value}) } />
+          <Input label="Password" type="password" name="password" placeholder="Enter Password" isrequired="true" value={data.password} onChange={(e) => setData({...data, password: e.target.value}) } />
 
           {/* forgot password option */}
           {isSignInPage && <div className='password-text'>Forgot Password?</div>}

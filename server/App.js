@@ -36,7 +36,7 @@ app.post('/api/register', async(req, res, next) => {
 
         //check if none of the required feild are empty
         if (!username || !email || !password) {
-            res.status(400).json({msg: 'Please enter all fields'});
+            res.status(400).send('Please enter all fields');
         }
         else{
 
@@ -47,10 +47,10 @@ app.post('/api/register', async(req, res, next) => {
             const isAlreadyExistuser = await Users.findOne({username});
 
             if(isAlreadyExist){
-                res.status(400).json({msg: 'User already exists'});
+                res.status(400).send('User already exists');
             }
             else if(isAlreadyExistuser){
-                res.status(400).json({msg: 'username already exists'});
+                res.status(400).send('username already exists');
             }
             else{
 
@@ -63,7 +63,7 @@ app.post('/api/register', async(req, res, next) => {
                     newUser.save();
                     next();
                 })
-                return res.status(200).json({msg: 'User registered successfully'});
+                return res.status(200).send('User registered successfully');
             }
         }
     } catch (error) {
@@ -80,21 +80,21 @@ app.post('/api/login', async(req, res, next) => {
 
         //check whether anything is not empty
         if (!username || !password) {
-            res.status(400).json({msg: 'Please enter all fields'});
+            res.status(400).send('Please enter all fields');
         }
         else{
 
             //find that userName is already exits or not and if not then response an error
             const user = await Users.findOne({username});
             if(!user){
-                res.status(400).json({msg: 'Username or password is incorrect'});
+                res.status(400).send('Username or password is incorrect');
             }
             else{
 
                 //check whether encrypted password of user is as same as given password
                 const validUser= await bcryptjs.compare(password,user.password);
                 if(!validUser){
-                    res.status(400).json({msg: 'Username or password is incorrect'});
+                    res.status(400).send('Username or password is incorrect');
                 }else{
 
                     //if user and and password match then update the user details by creating user's token
@@ -135,7 +135,7 @@ app.post('/api/conversation', async(req, res) => {
         const { senderId, receiverId } = req.body;
         const newConversation = new conversations({member: [senderId, receiverId]});
         await newConversation.save();
-        res.status(200).json({msg: 'Conversation created successfully'});
+        res.status(200).send('Conversation created successfully');
     } catch (error) {
         console.log(error, 'Error');
     }
