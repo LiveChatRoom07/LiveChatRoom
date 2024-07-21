@@ -5,38 +5,30 @@ import './Index.css'
 import { useNavigate } from 'react-router-dom';
 
 // isSignInPage = true for LogIn page
-function Index( {isSignInPage=false} ){
+function Index( {isSignInPage=true} ){
 
   const navigate = useNavigate()
 
   //store input values
   const[data, setData] = useState({
-    ...(isSignInPage && {UserName:''}),
-    Email:'',
-    Password:''
+    ...(isSignInPage && {username:''}),
+    email:'',
+    password:''
   })
 
 
   const handleSubmit = async(e) => {
     console.log('data :>>', data); //print data
     e.preventDefault();//prevent page reload
-    const res = await fetch(`http://localhost:8000/api/${isSignInPage ? 'login' : 'register'}`, {
-      method: 'POST',
+    const res = await fetch(`http://localhost:8000/api${isSignInPage ? '/login' : '/register'}`, {
+      method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     })
-    if(res.status === 400) {
-            alert('Invalid credentials')
-        }else{
-            const resData = await res.json()
-            if(resData.token) {
-                localStorage.setItem('user:token', resData.token)
-                localStorage.setItem('user:detail', JSON.stringify(resData.user))
-                navigate('/')
-            }
-        }
+      const resData = await res.json()
+      console.log('resData :>>', resData);
   }
 
   return (
@@ -50,7 +42,7 @@ function Index( {isSignInPage=false} ){
           {isSignInPage ? 'Sign in to get explored.!' : 'Sign up to get started.!'}
         </div>
 
-        <form onSubmit={(e) => handleSubmit(e) }>
+        <form method='POST' onSubmit={(e) => handleSubmit(e) }>
 
           {/* //input name */}
           <Input label="User Name" placeholder="Enter your Name" name="name" isrequired="true" length="15" value={data.UserName} onChange={(e) => setData({...data, UserName: e.target.value}) } />
@@ -76,7 +68,6 @@ function Index( {isSignInPage=false} ){
         </div>
 
     </div>
-  )
+)
 }
-
 export default Index
