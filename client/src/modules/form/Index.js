@@ -5,9 +5,7 @@ import './Index.css'
 import { useNavigate } from 'react-router-dom';
 
 // isSignInPage = true for LogIn page
-function Index( {isSignInPage=true} ){
-
-  const navigate = useNavigate()
+function Index( {isSignInPage=false} ){
 
   //store input values
   const[data, setData] = useState({
@@ -16,6 +14,7 @@ function Index( {isSignInPage=true} ){
     password:''
   })
 
+  const Navigate = useNavigate();
 
   const handleSubmit = async(e) => {
     console.log('data :>>', data); //print data
@@ -27,8 +26,20 @@ function Index( {isSignInPage=true} ){
       },
       body: JSON.stringify(data)
     })
-      const resData = await res.json()
-      console.log('resData :>>', resData);
+
+    if(res.status === 400) {
+        alert('Invalid credentials')
+    }
+    else{
+        const resData = await res.json()
+        if(resData.token) {
+            localStorage.setItem('user:token', resData.token)
+            localStorage.setItem('user:detail', JSON.stringify(resData.user));
+            
+            Navigate('/')
+        }
+    }
+
   }
 
   return (
@@ -64,7 +75,7 @@ function Index( {isSignInPage=true} ){
         {/* alternative page check */}
         <div className='signin-text'> 
           {isSignInPage ? "Didn't have an account? " : "Already have an account? "} 
-          <span className='signin' onClick={() => navigate(`/user/${isSignInPage ? 'sign_up' : 'sign_in'}`)} >{isSignInPage?'Sign up':'Sign in'}</span>
+          <span className='signin' onClick={() => Navigate(`/user/${isSignInPage ? 'sign_up' : 'sign_in'}`)} >{isSignInPage?'Sign up':'Sign in'}</span>
         </div>
 
     </div>
