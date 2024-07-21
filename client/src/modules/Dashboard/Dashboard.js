@@ -43,30 +43,29 @@ export const Dashboard = () => {
         }
     ]
 
-
-    //fetch convoList
-    useEffect(() => {
-        const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
-        const fetchconversations = async() => {
-            const res = await fetch(`http://localhost:8000/api/conversation/${loggedinUser?.id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                } 
-            });
-            const resData = await res.json();
-            console.log('reData :>>', resData);
-            setConversations(resData);
-        }
-    })
-
-
     //get user account details
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user:detail')));
     console.log(' user :>>', user);
 
     //get list of user conversations
     const [conversations, setConversations] = useState([]);
+
+    //fetch convoList
+    useEffect(() => {
+        const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
+        const fetchconversations = async() => {
+            const res = await fetch(`http://localhost:8000/api/conversation/${loggedinUser.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                } 
+            });
+            const resData = await res.json()
+            console.log('resData :>>', resData)
+            setConversations(resData)
+        }
+    })
+
 
   return (
     <>
@@ -83,7 +82,7 @@ export const Dashboard = () => {
                 </div>
             </div> 
             <div className='myconnections'>
-                <div className='heading'>
+                <div className='convo_heading'>
                     <h1>Messages</h1>
                 </div>
                 <div className='connection-list'>
@@ -137,7 +136,7 @@ export const Dashboard = () => {
                     </div>
                 </div>
                 <div className='type-message'>
-                    <Input type='text' placeholder='Type a message...' isrequired='false' length='500' value={msgsent} onChange={handlemsg} />
+                    <Input type='text' placeholder='Type a message...' isrequired={false} length='500' value={msgsent} onChange={handlemsg} name='typebox' />
                     <button className='sendmsg' type='submit'><img src={send} alt='send button'/></button>
                 </div>
             </div>
