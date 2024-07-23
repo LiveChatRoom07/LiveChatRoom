@@ -168,7 +168,7 @@ app.post('/api/messages', async(req, res) => {
     try {
         //save convoid, senderid and msg into dataset
         const {conversationId, senderId, message, receiverId='' } = req.body;
-
+        // console.log(conversationId, senderId, message, receiverId);
         if(!senderId || !message) return res.status(400).send("fill all required feilds");
 
         //usefull while making new connections_creating new convo if this is first msg
@@ -194,7 +194,7 @@ app.get('/api/messages/:conversationId', async(req, res) => {
     try{
         
         const checkMessages = async (conversationId) => {
-            console.log(conversationId, 'conversationId')
+            // console.log(conversationId, 'conversationId')
             const msg = await messages.find( {conversationId} );
 
             //find userdata with his/her msg in given conversationid
@@ -221,8 +221,6 @@ app.get('/api/messages/:conversationId', async(req, res) => {
         } else {
             checkMessages(conversationId);
         }
-
-        
     }catch( error ){
         console.log(error, 'Error');
     }
@@ -237,7 +235,7 @@ app.get('/api/users', async(req, res) => {
         //get user data
         const userdata = Promise.all(users.map( async(user) => 
         {
-            return{user: {name: user.username, email: user.email}, userId: user._id}
+            return{user: {username: user.username, email: user.email, receiverId: user._id}}
         }));
         res.status(200).json(await userdata);
     }

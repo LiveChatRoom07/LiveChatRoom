@@ -18,7 +18,7 @@ export const Dashboard = () => {
     const [conversation, setConversation] = useState([]);
     const [messages, setMessages] = useState({});
     const [users, setUsers] = useState([]);
-    console.log('users :>>', users)
+    
 
     //fetch convoList
     useEffect(() => {
@@ -72,6 +72,7 @@ export const Dashboard = () => {
             message: msgsent,
             receiverId: messages.receiver?.receiverId
         }
+        console.log('senderdata :>>', data);
         const res = await fetch(`http://localhost:8000/api/messages`, {
             method: 'POST',
             headers: {
@@ -120,7 +121,7 @@ export const Dashboard = () => {
                         }) 
                         :
                         <div className='no-messager'>
-                            <p> Start chat</p>
+                            <p> No Connections</p>
                         </div>
                     }
                 </div>
@@ -185,7 +186,7 @@ export const Dashboard = () => {
         {/* profile-list */}
         <div className='third'>
             <div className='convo_heading'>
-                <h1 className='msg_heading'>Messages</h1>
+                <h1 className='msg_heading'>People</h1>
             </div>
             <div className='connection-list'>
                 {
@@ -197,7 +198,7 @@ export const Dashboard = () => {
                                     <img src={profilepic} alt='profilepic'/>
                                 </div>
                                 <div className='connection-info'>
-                                    <h1 className='connection-username'>{user?.name}</h1>
+                                    <h1 className='connection-username'>{user?.username}</h1>
                                     <p className='connection-message'>{user?.email}</p>
                                 </div>
                             </div>
