@@ -10,40 +10,7 @@ export const Dashboard = () => {
     const handlemsg = (e) => {
         setMsgSent(e.target.value);
     };
-    const connections= [
-        {
-            uname: 'Tanjiro',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        {
-            uname: 'Zenitsu',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        {
-            uname: 'Inosuke',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        {
-            uname: 'Nezuko',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        // {
-        //     uname: 'Giyu',
-        //     message: 'Hey! How are you?',
-        //     img: profilepic
-        // },
-        {
-            uname: 'obanai',
-            message: 'Got some rizz babe!',
-            img: profilepic
-        }
-    ]
-
-
+    
     //fetch convoList
     useEffect(() => {
         const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
@@ -55,12 +22,7 @@ export const Dashboard = () => {
                 } 
             });
             const resData = await res.json();
-<<<<<<< HEAD
             setConversation(resData);
-=======
-            // console.log('reData :>>', resData);
-            setConversations(resData);
->>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
         }
         fetchconversations()
     },[])
@@ -72,11 +34,7 @@ export const Dashboard = () => {
     //get list of user conversations
     const [conversation, setConversation] = useState([]);
     console.log(' user :>>', user);
-<<<<<<< HEAD
     console.log(' conversation :>>', conversation);
-=======
-    console.log('conversations :>>', conversations);
->>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
 
   return (
     <>
