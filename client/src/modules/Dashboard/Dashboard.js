@@ -10,39 +10,15 @@ export const Dashboard = () => {
     const handlemsg = (e) => {
         setMsgSent(e.target.value);
     };
-    const connections= [
-        {
-            uname: 'Tanjiro',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        {
-            uname: 'Zenitsu',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        {
-            uname: 'Inosuke',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        {
-            uname: 'Nezuko',
-            message: 'Hey! How are you?',
-            img: profilepic
-        },
-        // {
-        //     uname: 'Giyu',
-        //     message: 'Hey! How are you?',
-        //     img: profilepic
-        // },
-        {
-            uname: 'obanai',
-            message: 'Got some rizz babe!',
-            img: profilepic
-        }
-    ]
 
+    //get user account details
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user:detail')));
+
+    //get list of user conversations
+    const [conversation, setConversation] = useState([]);
+    const [messages, setMessages] = useState({});
+    // console.log(' user :>>', user);
+    // console.log(' conversation :>>', conversation);
 
     //fetch convoList
     useEffect(() => {
@@ -55,28 +31,25 @@ export const Dashboard = () => {
                 } 
             });
             const resData = await res.json();
-<<<<<<< HEAD
             setConversation(resData);
-=======
-            // console.log('reData :>>', resData);
-            setConversations(resData);
->>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
         }
         fetchconversations()
     },[])
 
+    //Fetch Messages
+    const fetchMessages = async(conversationId, user) => {
+        const res = await fetch(`http://localhost:8000/api/messages/${conversationId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            } 
+        });
+        const resData = await res.json();
+        console.log(' resData :>>', resData);
+        setMessages({msg: resData, receiver: user});
+    }
+    // fetchconversations()
 
-    //get user account details
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user:detail')));
-
-    //get list of user conversations
-    const [conversation, setConversation] = useState([]);
-    console.log(' user :>>', user);
-<<<<<<< HEAD
-    console.log(' conversation :>>', conversation);
-=======
-    console.log('conversations :>>', conversations);
->>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
 
   return (
     <>
@@ -98,10 +71,10 @@ export const Dashboard = () => {
                 </div>
                 <div className='connection-list'>
                     {
-                        !conversation.length > 0 ?
+                        conversation.length > 0 ?
                         conversation.map(({conversationId, user})=>{
                             return(
-                                <div className='connection' onClick={()=>console.log('hello')}>
+                                <div className='connection' onClick={()=> fetchMessages(conversationId, user)}>
                                     <div className='connection-pic'>
                                         <img src={profilepic} alt='profilepic'/>
                                     </div>
@@ -140,15 +113,26 @@ export const Dashboard = () => {
                 </div>
                 <div className='chat-body'>
                     <div className='chat'>
-                        <div className='sent'>
-                            <p>hello, How are u?</p>
-                        </div>
-                        <div className='received'>
-                            <p>Hey! How are you? </p>
-                        </div>
-                        <div className='received'>
-                            <p> I am GOOD!!</p>
-                        </div>
+                        {
+                            messages?.msg?.length > 0 ?
+                            messages.msg.map(({message, user : { id } = {}}) => {
+                                if(id == user?.id)
+                                {
+                                    return(
+                                        <div className='sent'>
+                                            <p> {message}</p>
+                                        </div>
+                                    )
+                                }
+                                else{
+                                    return(
+                                        <div className='received'>
+                                            <p>{message}</p>
+                                        </div>  
+                                    )
+                                }
+                            }) : <div className='no-message'><p> Start chat</p></div>
+                        }
                     </div>
                 </div>
                 <div className='type-message'>
