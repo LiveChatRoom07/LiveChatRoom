@@ -55,7 +55,12 @@ export const Dashboard = () => {
                 } 
             });
             const resData = await res.json();
+<<<<<<< HEAD
             setConversation(resData);
+=======
+            // console.log('reData :>>', resData);
+            setConversations(resData);
+>>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
         }
         fetchconversations()
     },[])
@@ -67,7 +72,11 @@ export const Dashboard = () => {
     //get list of user conversations
     const [conversation, setConversation] = useState([]);
     console.log(' user :>>', user);
+<<<<<<< HEAD
     console.log(' conversation :>>', conversation);
+=======
+    console.log('conversations :>>', conversations);
+>>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
 
   return (
     <>
@@ -85,7 +94,7 @@ export const Dashboard = () => {
             </div> 
             <div className='myconnections'>
                 <div className='convo_heading'>
-                    <h1>Messages</h1>
+                    <h1 className='msg_heading'>Messages</h1>
                 </div>
                 <div className='connection-list'>
                     {
