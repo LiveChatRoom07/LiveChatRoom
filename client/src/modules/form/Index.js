@@ -14,7 +14,7 @@ function Index( {isSignInPage=false} ){
     password:''
   })
 
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async(e) => {
     console.log('data :>>', data); //print data
@@ -28,18 +28,15 @@ function Index( {isSignInPage=false} ){
     })
 
     if(res.status === 400) {
-        alert('Invalid credentials')
+      alert('Invalid credentials')
+    }else{
+      const resData = await res.json()
+      if(resData.token) {
+        localStorage.setItem('user:token', resData.token)
+        localStorage.setItem('user:detail', JSON.stringify(resData.user))
+        navigate('/')
+      }
     }
-    else{
-        const resData = await res.json()
-        if(resData.token) {
-            localStorage.setItem('user:token', resData.token)
-            localStorage.setItem('user:detail', JSON.stringify(resData.user));
-            
-            Navigate('/')
-        }
-    }
-
   }
 
   return (
@@ -75,7 +72,7 @@ function Index( {isSignInPage=false} ){
         {/* alternative page check */}
         <div className='signin-text'> 
           {isSignInPage ? "Didn't have an account? " : "Already have an account? "} 
-          <span className='signin' onClick={() => Navigate(`/user/${isSignInPage ? 'sign_up' : 'sign_in'}`)} >{isSignInPage?'Sign up':'Sign in'}</span>
+          <span className='signin' onClick={() => navigate(`/user/${isSignInPage ? 'sign_up' : 'sign_in'}`)} >{isSignInPage?'Sign up':'Sign in'}</span>
         </div>
 
     </div>

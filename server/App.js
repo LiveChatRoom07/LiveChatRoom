@@ -111,10 +111,8 @@ app.post('/api/login', async(req, res, next) => {
                             $set: { token } 
                         })
                         user.save();
-                        next();
+                        return res.status(200).json({ user: { id: user._id, email: user.email, username: user.username }, token: token })
                     } )
-
-                    res.status(200).json({ user })
                 }
                 
             }

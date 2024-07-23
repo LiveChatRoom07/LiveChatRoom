@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Dashboard.css';
 import mail from '../../assets/mailto.png';
 import send from '../../assets/send.png';
@@ -42,6 +42,33 @@ export const Dashboard = () => {
             img: profilepic
         }
     ]
+
+
+    //fetch convoList
+    useEffect(() => {
+        const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
+        const fetchconversations = async() => {
+            const res = await fetch(`http://localhost:8000/api/conversation/${loggedinUser?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                } 
+            });
+            const resData = await res.json();
+            console.log('reData :>>', resData);
+            setConversations(resData);
+        }
+        fetchconversations()
+    },[])
+
+
+    //get user account details
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user:detail')));
+
+    //get list of user conversations
+    const [conversations, setConversations] = useState([]);
+    console.log(' user :>>', user);
+
   return (
     <>
     <div className='dashobord-content'>
@@ -52,7 +79,7 @@ export const Dashboard = () => {
                     <img src={profilepic} alt='profilepic'/>
                 </div>
                 <div className='profileinfo'>
-                    <h1 className='username'>Don joe</h1>
+                    <h1 className='username'>{user?.username}</h1>
                     <p className='bio'>I am bookworm & I love rain!</p>
                 </div>
             </div> 
