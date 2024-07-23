@@ -17,6 +17,8 @@ export const Dashboard = () => {
     //get list of user conversations
     const [conversation, setConversation] = useState([]);
     const [messages, setMessages] = useState({});
+    const [users, setUsers] = useState([]);
+    console.log('users :>>', users)
 
     //fetch convoList
     useEffect(() => {
@@ -32,6 +34,22 @@ export const Dashboard = () => {
             setConversation(resData);
         }
         fetchconversations()
+    },[])
+
+    //fetch all users
+    useEffect(() => {
+        // const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
+        const fetchUsers = async() => {
+            const res = await fetch(`http://localhost:8000/api/users/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                } 
+            });
+            const resData = await res.json();
+            setUsers(resData);
+        }
+        fetchUsers()
     },[])
 
     //Fetch Messages
@@ -166,7 +184,31 @@ export const Dashboard = () => {
         </div>
         {/* profile-list */}
         <div className='third'>
-
+            <div className='convo_heading'>
+                <h1 className='msg_heading'>Messages</h1>
+            </div>
+            <div className='connection-list'>
+                {
+                    users.length > 0 ?
+                    users.map(({userId, user})=>{
+                        return(
+                            <div className='connection' onClick={()=> fetchMessages('new' , user)}>
+                                <div className='connection-pic'>
+                                    <img src={profilepic} alt='profilepic'/>
+                                </div>
+                                <div className='connection-info'>
+                                    <h1 className='connection-username'>{user?.name}</h1>
+                                    <p className='connection-message'>{user?.email}</p>
+                                </div>
+                            </div>
+                        );
+                    }) 
+                    :
+                    <div className='no-messager'>
+                        <p> Start chat</p>
+                    </div>
+                }
+            </div>
         </div>
     </div>
     </>
