@@ -194,13 +194,13 @@ app.get('/api/messages/:conversationId', async(req, res) => {
     try{
         
         const checkMessages = async (conversationId) => {
-            console.log(conversationId, 'conversationId')
+            // console.log(conversationId, 'conversationId')
             const msg = await messages.find( {conversationId} );
 
             //find userdata with his/her msg in given conversationid
             const msgSenderdata = Promise.all(msg.map( async(message) => {
                 const user = await Users.findById(message.senderId);
-                return {user: {Name: user.username, id:user._id}, message: message.message}
+                return {user: {username: user.username, id:user._id}, message: message.message}
             } ));
 
             res.status(200).json(await msgSenderdata);
@@ -230,14 +230,15 @@ app.get('/api/messages/:conversationId', async(req, res) => {
 
 
 //get list of all users
-app.get('/api/users', async(req, res) => {
+app.get('/api/users/:userId', async(req, res) => {
     try{
-        const users = await Users.find();
+        const userId = req.params.userId;
+        const users = await Users.find( {_id : {$ne : userId}});
 
         //get user data
         const userdata = Promise.all(users.map( async(user) => 
         {
-            return{user: {name: user.username, email: user.email}, userId: user._id}
+            return{user: {username: user.username, email: user.email, receiverId: user._id}}
         }));
         res.status(200).json(await userdata);
     }

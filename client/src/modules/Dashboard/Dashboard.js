@@ -40,7 +40,7 @@ export const Dashboard = () => {
     useEffect(() => {
         // const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
         const fetchUsers = async() => {
-            const res = await fetch(`http://localhost:8000/api/users/`, {
+            const res = await fetch(`http://localhost:8000/api/users/${user.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,8 +53,9 @@ export const Dashboard = () => {
     },[])
 
     //Fetch Messages
-    const fetchMessages = async(conversationId, user) => {
-        const res = await fetch(`http://localhost:8000/api/messages/${conversationId}`, {
+    const fetchMessages = async(conversationId, receiver) => {
+        const res = await fetch(`http://localhost:8000/api/messages/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`, {
+            // ...(conversationId === 'new' && { body: JSON.stringify({senderId: user?.id, receiverId: messages?.receiver?.receiverId}) }),
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ export const Dashboard = () => {
         });
         const resData = await res.json();
         console.log(' resData :>>', resData);
-        setMessages({msg: resData, receiver: user, conversationId});
+        setMessages({msg: resData, receiver, conversationId});
     }
     // send Messages
     const sendMessage = async(e) => {
@@ -70,9 +71,11 @@ export const Dashboard = () => {
             conversationId: messages?.conversationId,
             senderId: user?.id,
             message: msgsent,
-            receiverId: messages.receiver?.receiverId
+            receiverId: messages?.receiver?.receiverId
         }
+        // const conversationId = messages?.conversationId
         const res = await fetch(`http://localhost:8000/api/messages`, {
+            
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -197,7 +200,7 @@ export const Dashboard = () => {
                                     <img src={profilepic} alt='profilepic'/>
                                 </div>
                                 <div className='connection-info'>
-                                    <h1 className='connection-username'>{user?.name}</h1>
+                                    <h1 className='connection-username'>{user?.username}</h1>
                                     <p className='connection-message'>{user?.email}</p>
                                 </div>
                             </div>
