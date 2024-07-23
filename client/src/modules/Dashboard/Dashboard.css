@@ -62,7 +62,7 @@
     /* overflow-y: scroll;
     scrollbar-width: thin; */
 }
-.convo_heading h1{
+.msg_heading{
     margin-top: 30px;
     font-size: 1.25rem;
     font-family: 'kumbh-sans';

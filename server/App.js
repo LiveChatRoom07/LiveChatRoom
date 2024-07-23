@@ -131,7 +131,7 @@ app.post('/api/conversation', async(req, res) => {
 
         //get sender and reciever id of conversation and save it as an array in coversation database
         const { senderId, receiverId } = req.body;
-        const newConversation = new conversations({member: [senderId, receiverId]});
+        const newConversation = new conversations({members: [senderId, receiverId]});
         await newConversation.save();
         res.status(200).send('Conversation created successfully');
     } catch (error) {
@@ -145,9 +145,9 @@ app.get('/api/conversation/:userId', async(req, res) => {
 
         //find ids all friends of an user using its userid and conversation database
         const userId = req.params.userId;
-        const convo = await conversations.find({member: { $in: [userId]}});
-        const convoData = Promise.all(convo.map(async(conversation) => {
-            const receiverId = conversation.member.find((membr) => membr !== userId);
+        const convo = await conversations.find({members: { $in: [userId]}});
+        const convoData = Promise.all(convo.map(async (conversation) => {
+            const receiverId = conversation.members.find((member) => member !== userId);
 
             //find all details of friend using their ids
             const user= await Users.findById(receiverId);

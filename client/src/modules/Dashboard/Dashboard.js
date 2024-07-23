@@ -52,19 +52,20 @@ export const Dashboard = () => {
 
     //fetch convoList
     useEffect(() => {
-        const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
-        const fetchconversations = async() => {
-            const res = await fetch(`http://localhost:8000/api/conversation/${loggedinUser.id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                } 
-            });
-            const resData = await res.json()
+        const loggedInUser = JSON.parse(localStorage.getItem('user:detail'));
+        const fetchConversations = async () => {
+            const res = await fetch(`http://localhost:8000/api/conversation/${loggedInUser?.id}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				}
+			})
+			const resData = await res.json()
             console.log('resData :>>', resData)
             setConversations(resData)
         }
-    })
+        fetchConversations()
+    },[])
 
 
   return (
@@ -83,7 +84,7 @@ export const Dashboard = () => {
             </div> 
             <div className='myconnections'>
                 <div className='convo_heading'>
-                    <h1>Messages</h1>
+                    <h1 className='msg_heading'>Messages</h1>
                 </div>
                 <div className='connection-list'>
                     {
