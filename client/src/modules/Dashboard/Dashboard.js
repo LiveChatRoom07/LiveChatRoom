@@ -43,30 +43,32 @@ export const Dashboard = () => {
         }
     ]
 
-    //get user account details
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user:detail')));
-    console.log(' user :>>', user);
-
-    //get list of user conversations
-    const [conversations, setConversations] = useState([]);
 
     //fetch convoList
     useEffect(() => {
-        const loggedInUser = JSON.parse(localStorage.getItem('user:detail'));
-        const fetchConversations = async () => {
-            const res = await fetch(`http://localhost:8000/api/conversation/${loggedInUser?.id}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				}
-			})
-			const resData = await res.json()
-            console.log('resData :>>', resData)
-            setConversations(resData)
+        const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
+        const fetchconversations = async() => {
+            const res = await fetch(`http://localhost:8000/api/conversation/${loggedinUser?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                } 
+            });
+            const resData = await res.json();
+            // console.log('reData :>>', resData);
+            setConversations(resData);
         }
-        fetchConversations()
+        fetchconversations()
     },[])
 
+
+    //get user account details
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user:detail')));
+
+    //get list of user conversations
+    const [conversations, setConversations] = useState([]);
+    console.log(' user :>>', user);
+    console.log('conversations :>>', conversations);
 
   return (
     <>
@@ -88,15 +90,15 @@ export const Dashboard = () => {
                 </div>
                 <div className='connection-list'>
                     {
-                        connections.map(({uname, message, img})=>{
+                        conversations.map(({conversationId, user, img = profilepic})=>{
                             return(
                                 <div className='connection'>
                                     <div className='connection-pic'>
                                         <img src={img} alt='profilepic'/>
                                     </div>
                                     <div className='connection-info'>
-                                        <h1 className='connection-username'>{uname}</h1>
-                                        <p className='connection-message'>{message}</p>
+                                        <h1 className='connection-username'>{user?.username}</h1>
+                                        <p className='connection-message'>{user?.email}</p>
                                     </div>
                                 </div>
                             );

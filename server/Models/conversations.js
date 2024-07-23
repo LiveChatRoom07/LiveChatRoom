@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 //user conversation data like one user connected with which other users 
 const conversationSchema = mongoose.Schema({
-    members:{
+    member:{
         type: Array,
         required: true
     }

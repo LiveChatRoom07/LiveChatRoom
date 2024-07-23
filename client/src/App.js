@@ -19,9 +19,6 @@ const ProtectedRoute = ({children, auth=false}) => {
   return children;
 }
 
-
-
-
 function App() {
 
   return (
