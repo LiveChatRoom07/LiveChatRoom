@@ -193,21 +193,36 @@ app.post('/api/messages', async(req, res) => {
 app.get('/api/messages/:conversationId', async(req, res) => {
     try{
         
+        const checkMessages = async (conversationId) => {
+            console.log(conversationId, 'conversationId')
+            const msg = await messages.find( {conversationId} );
+
+            //find userdata with his/her msg in given conversationid
+            const msgSenderdata = Promise.all(msg.map( async(message) => {
+                const user = await Users.findById(message.senderId);
+                return {user: {Name: user.username, id:user._id}, message: message.message}
+            } ));
+
+            res.status(200).json(await msgSenderdata);
+        }
+
+
         //find all msgs of given convoid
         const conversationId = req.params.conversationId;
 
         //check whether convoid exists or not
-        if(!conversationId) return res.status(200).json([]);
+        if (conversationId === 'new') {
+            const checkConversation = await conversations.find({ member: { $all: [req.query.senderId, req.query.receiverId] } });
+            if (checkConversation.length > 0) {
+                checkMessages(checkConversation[0]._id);
+            } else {
+                return res.status(200).json([])
+            }
+        } else {
+            checkMessages(conversationId);
+        }
 
-        const msg = await messages.find( {conversationId} );
-
-        //find userdata with his/her msg in given conversationid
-        const msgSenderdata = Promise.all(msg.map( async(message) => {
-            const user = await Users.findById(message.senderId);
-            return {user: {Name: user.username, id:user._id}, message: message.message}
-        } ));
-
-        res.status(200).json(await msgSenderdata);
+        
     }catch( error ){
         console.log(error, 'Error');
     }
