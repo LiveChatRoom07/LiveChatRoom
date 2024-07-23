@@ -47,10 +47,10 @@ app.post('/api/register', async(req, res, next) => {
             const isAlreadyExistuser = await Users.findOne({username});
 
             if(isAlreadyExist){
-                res.status(400).send('User already exists');
+                res.status(400).send("User already exists");
             }
             else if(isAlreadyExistuser){
-                res.status(400).send('username already exists');
+                res.status(400).send("username already exists");
             }
             else{
 
@@ -133,7 +133,7 @@ app.post('/api/conversation', async(req, res) => {
         const { senderId, receiverId } = req.body;
         const newConversation = new conversations({member: [senderId, receiverId]});
         await newConversation.save();
-        res.status(200).send('Conversation created successfully');
+        res.status(200).send('conversation created successfully');
     } catch (error) {
         console.log(error, 'Error');
     }
@@ -177,14 +177,14 @@ app.post('/api/messages', async(req, res) => {
             await newConversation.save();
             const newMessage = new messages({conversationId: newConversation._id, senderId, message});
             await newMessage.save();
-            return res.status(200).send('Message sent successfully');
+            return res.status(200).send("message sent successfully");
         }else if(!conversationId && !receiverId){
             return res.status(400).send("fill all required feilds");
         }
 
         const newMessage = new messages({conversationId, senderId, message});
         await newMessage.save();
-        res.status(200).send('Message sent successfully');
+        res.status(200).send("message sent successfully");
     }catch( error ){
         console.log(error, 'Error');
     }
