@@ -172,7 +172,7 @@ app.post('/api/messages', async(req, res) => {
         if(!senderId || !message) return res.status(400).send("fill all required feilds");
 
         //usefull while making new connections_creating new convo if this is first msg
-        if(!conversationId && receiverId) {
+        if(conversationId === 'new' && receiverId) {
             const newConversation = new conversations({member: [senderId, receiverId]});
             await newConversation.save();
             const newMessage = new messages({conversationId: newConversation._id, senderId, message});
@@ -204,7 +204,7 @@ app.get('/api/messages/:conversationId', async(req, res) => {
         //find userdata with his/her msg in given conversationid
         const msgSenderdata = Promise.all(msg.map( async(message) => {
             const user = await Users.findById(message.senderId);
-            return {user: {Name: user.username}, message: message.message}
+            return {user: {Name: user.username, id:user._id}, message: message.message}
         } ));
 
         res.status(200).json(await msgSenderdata);
