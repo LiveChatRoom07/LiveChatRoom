@@ -55,8 +55,12 @@ export const Dashboard = () => {
                 } 
             });
             const resData = await res.json();
+<<<<<<< HEAD
+            setConversation(resData);
+=======
             // console.log('reData :>>', resData);
             setConversations(resData);
+>>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
         }
         fetchconversations()
     },[])
@@ -66,9 +70,13 @@ export const Dashboard = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user:detail')));
 
     //get list of user conversations
-    const [conversations, setConversations] = useState([]);
+    const [conversation, setConversation] = useState([]);
     console.log(' user :>>', user);
+<<<<<<< HEAD
+    console.log(' conversation :>>', conversation);
+=======
     console.log('conversations :>>', conversations);
+>>>>>>> 70e9aeb8d6b64f002e8f0a72bfd77878454b3938
 
   return (
     <>
@@ -90,11 +98,12 @@ export const Dashboard = () => {
                 </div>
                 <div className='connection-list'>
                     {
-                        conversations.map(({conversationId, user, img = profilepic})=>{
+                        !conversation.length > 0 ?
+                        conversation.map(({conversationId, user})=>{
                             return(
-                                <div className='connection'>
+                                <div className='connection' onClick={()=>console.log('hello')}>
                                     <div className='connection-pic'>
-                                        <img src={img} alt='profilepic'/>
+                                        <img src={profilepic} alt='profilepic'/>
                                     </div>
                                     <div className='connection-info'>
                                         <h1 className='connection-username'>{user?.username}</h1>
@@ -102,7 +111,11 @@ export const Dashboard = () => {
                                     </div>
                                 </div>
                             );
-                        })
+                        }) 
+                        :
+                        <div className='no-message'>
+                            <p> Start chat</p>
+                        </div>
                     }
                 </div>
             </div>
