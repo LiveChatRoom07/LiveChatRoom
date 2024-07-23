@@ -69,6 +69,7 @@ export const Dashboard = () => {
     const [conversations, setConversations] = useState([]);
     console.log(' user :>>', user);
 
+
   return (
     <>
     <div className='dashobord-content'>
@@ -84,7 +85,7 @@ export const Dashboard = () => {
                 </div>
             </div> 
             <div className='myconnections'>
-                <div className='heading'>
+                <div className='convo_heading'>
                     <h1>Messages</h1>
                 </div>
                 <div className='connection-list'>
@@ -138,7 +139,7 @@ export const Dashboard = () => {
                     </div>
                 </div>
                 <div className='type-message'>
-                    <Input type='text' placeholder='Type a message...' isrequired='false' length='500' value={msgsent} onChange={handlemsg} />
+                    <Input type='text' placeholder='Type a message...' isrequired={false} length='500' value={msgsent} onChange={handlemsg} name='typebox' />
                     <button className='sendmsg' type='submit'><img src={send} alt='send button'/></button>
                 </div>
             </div>
