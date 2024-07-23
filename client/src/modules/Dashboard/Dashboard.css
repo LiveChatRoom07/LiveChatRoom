@@ -114,6 +114,13 @@
     font-family: 'kumbh-sans', sans-serif;
     color: var(--text);
 }
+.no-message{
+    margin-left: 30px;
+    font-size: 1.25rem;
+    font-family: 'kumbh-sans', sans-serif;
+    color: var(--text);
+    font-weight: 500;
+}
 /* for chat page */
 .second{
     background-color: var(--disable);
