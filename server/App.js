@@ -4,6 +4,7 @@ const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+// const io = require('socket.io')(8000, {});
 
 //connect DB
 require('./db/connection');
@@ -200,7 +201,7 @@ app.get('/api/messages/:conversationId', async(req, res) => {
             //find userdata with his/her msg in given conversationid
             const msgSenderdata = Promise.all(msg.map( async(message) => {
                 const user = await Users.findById(message.senderId);
-                return {user: {Name: user.username, id:user._id}, message: message.message}
+                return {user: {username: user.username, id:user._id}, message: message.message}
             } ));
 
             res.status(200).json(await msgSenderdata);
@@ -228,9 +229,10 @@ app.get('/api/messages/:conversationId', async(req, res) => {
 
 
 //get list of all users
-app.get('/api/users', async(req, res) => {
+app.get('/api/users/:userId', async(req, res) => {
     try{
-        const users = await Users.find();
+        const userId = req.params.userId;
+        const users = await Users.find( {_id : {$ne : userId}});
 
         //get user data
         const userdata = Promise.all(users.map( async(user) => 
