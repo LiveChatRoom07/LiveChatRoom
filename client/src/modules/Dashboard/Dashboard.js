@@ -4,6 +4,7 @@ import mail from '../../assets/mailto.png';
 import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
+import { io } from 'socket.io-client/dist/socket.io';
 
 export const Dashboard = () => {
     const [msgsent, setMsgSent] = useState('');
@@ -18,7 +19,15 @@ export const Dashboard = () => {
     const [conversation, setConversation] = useState([]);
     const [messages, setMessages] = useState({});
     const [users, setUsers] = useState([]);
-    console.log('users :>>', users)
+    const [socket, setSocket] = useState(null);
+    // console.log('users :>>', users)
+
+
+    //connecting socket
+    useEffect(() => {
+        setSocket(io('http://localhost:8080'))
+    },[])
+
 
     //fetch convoList
     useEffect(() => {
