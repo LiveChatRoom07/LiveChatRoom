@@ -59,8 +59,8 @@
     /* height: ; */
     display: flex;
     flex-direction: column;
-    /* overflow-y: scroll;
-    scrollbar-width: thin; */
+    overflow-y: scroll;
+    scrollbar-width: thin;
 }
 .msg_heading{
     margin-top: 30px;

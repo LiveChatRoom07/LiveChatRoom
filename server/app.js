@@ -42,6 +42,14 @@ io.on('connection', socket => {
                 receiverId,
                 user: {id:user._id, email: user.email, username: user.username}
             });
+        }else{
+            io.to(sender.socketId).emit('getMessage', {
+                conversationId, 
+                senderId, 
+                message, 
+                receiverId,
+                user: {id:user._id, email: user.email, username: user.username}
+            });
         }
     });
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Dashboard.css';
 import mail from '../../assets/mailto.png';
 import send from '../../assets/send.png';
@@ -20,7 +20,10 @@ export const Dashboard = () => {
     const [messages, setMessages] = useState({});
     const [users, setUsers] = useState([]);
     const [socket, setSocket] = useState(null);
-    console.log('messages :>>', messages)
+    const messageRef = useRef(null);
+    const activeUsers = [];
+    // const [activeUsers, setActiveUsers] = useState([]);
+    // console.log('messages :>>', messages)
 
 
     //connecting socket
@@ -33,6 +36,10 @@ export const Dashboard = () => {
 
         //get all active users
         socket?.on('getUsers', users => {
+            // for (user in users){
+            //     activeUsers.push(user.userId);
+            // }
+            
             console.log('Active User:>>', users);
         })
 
@@ -45,6 +52,12 @@ export const Dashboard = () => {
             }))
         })
     },[socket])
+
+
+    //reference
+    useEffect(() => {
+        messageRef?.current?.scrollIntoView({ behavior:'smooth' })
+    }, [messages?.msg])
 
 
     //fetch convoList
@@ -65,7 +78,6 @@ export const Dashboard = () => {
 
     //fetch all users
     useEffect(() => {
-        // const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
         const fetchUsers = async() => {
             const res = await fetch(`http://localhost:8000/api/users/${user.id}`, {
                 method: 'GET',
@@ -82,16 +94,15 @@ export const Dashboard = () => {
     //Fetch Messages
     const fetchMessages = async(conversationId, receiver) => {
         const res = await fetch(`http://localhost:8000/api/messages/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`, {
-            // ...(conversationId === 'new' && { body: JSON.stringify({senderId: user?.id, receiverId: messages?.receiver?.receiverId}) }),
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             } 
         });
         const resData = await res.json();
-        // console.log(' resData :>>', resData);
         setMessages({msg: resData, receiver, conversationId});
     }
+
     // send Messages
     const sendMessage = async(e) => {
         const data = {
@@ -103,17 +114,13 @@ export const Dashboard = () => {
 
         socket.emit('sendMessage', data);
 
-        // const conversationId = messages?.conversationId
-        const res = await fetch(`http://localhost:8000/api/messages`, {
-            
+        const res = await fetch(`http://localhost:8000/api/messages`, {            
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
-        // const resData = await res.json();
-        // console.log('resData :>>', resData);
         setMsgSent('');
     }
 
@@ -188,16 +195,23 @@ export const Dashboard = () => {
                                 if(id === user?.id)
                                 {
                                     return(
-                                        <div className='sent'>
-                                            <p> {message}</p>
-                                        </div>
+                                        <>
+                                            <div className='sent'>
+                                                <p> {message}</p>
+                                            </div>
+                                            <div ref={messageRef}></div>
+                                        </>
+                                        
                                     )
                                 }
                                 else{
                                     return(
-                                        <div className='received'>
-                                            <p>{message}</p>
-                                        </div>  
+                                        <>
+                                            <div className='received'>
+                                                <p> {message}</p>
+                                            </div>
+                                            <div ref={messageRef}></div>
+                                        </>  
                                     )
                                 }
                             }) : <div className='no-message'><p> Start chat</p></div>
