@@ -4,6 +4,7 @@ import mail from '../../assets/mailto.png';
 import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
+import { io } from 'socket.io-client';
 
 export const Dashboard = () => {
     const [msgsent, setMsgSent] = useState('');
@@ -18,7 +19,29 @@ export const Dashboard = () => {
     const [conversation, setConversation] = useState([]);
     const [messages, setMessages] = useState({});
     const [users, setUsers] = useState([]);
-    
+    const [socket, setSocket] = useState(null);
+    // console.log('users :>>', users)
+
+    console.log('messages :>>', messages);
+    //connecting socket
+    useEffect(() => {
+        setSocket(io('http://localhost:8080'))
+    },[]);
+
+    useEffect(() => {
+        socket?.emit('addUser', user?.id);
+        socket?.on('getUsers', (users) => {
+            console.log('activeusers :>>', users);
+        })
+        socket?.on('getMessage', data => {
+            console.log('dataa :>>', data);
+			setMessages((prev )=> ({
+				...prev,
+				msg: [...prev.msg, { user: data.user, message: data.message }]
+			}))
+        })
+    },[socket])
+
 
     //fetch convoList
     useEffect(() => {
@@ -50,7 +73,7 @@ export const Dashboard = () => {
             setUsers(resData);
         }
         fetchUsers()
-    },[])
+    },[]);
 
     //Fetch Messages
     const fetchMessages = async(conversationId, receiver) => {
@@ -73,6 +96,7 @@ export const Dashboard = () => {
             message: msgsent,
             receiverId: messages?.receiver?.receiverId
         }
+        socket?.emit('sendMessage', data);
         // const conversationId = messages?.conversationId
         const res = await fetch(`http://localhost:8000/api/messages`, {
             
@@ -82,8 +106,6 @@ export const Dashboard = () => {
             },
             body: JSON.stringify(data)
         });
-        const resData = await res.json();
-        console.log('resData :>>', resData);
         setMsgSent('');
     }
 
@@ -205,7 +227,7 @@ export const Dashboard = () => {
                                 </div>
                             </div>
                         );
-                    }) 
+                    })
                     :
                     <div className='no-messager'>
                         <p> Start chat</p>
