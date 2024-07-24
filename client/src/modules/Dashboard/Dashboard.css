@@ -1,3 +1,6 @@
+/* ::-webkit-scrollbar{
+    display: none;
+  } */
 /* for entire page of dashboard */
 .dashobord-content{
     width: 100vw;
@@ -202,7 +205,7 @@
     height: 80vh;
     width: 50vw;
     overflow-y: scroll;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     background-color: transparent;
     display: flex;
     flex-direction: column;
@@ -258,6 +261,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 5px;
 }
 .type-message .inputfeild{
     width: 35vw;
@@ -331,4 +335,9 @@
     background-color: whitesmoke;
     width: 25vw;
     height: 100vh;
+}
+.connection-list{
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
 }
