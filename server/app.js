@@ -4,50 +4,64 @@ const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-
-//socket.io
 const io = require('socket.io')(8080, {
     cors: {
         origin: 'http://localhost:3000',
-        // methods: ['GET', 'POST']
     }
 });
+
+
+//socket.io
 let users = [];
-io.on('connection', (socket) => {
-    console.log('connected', socket.id);
-    socket.on('addUser', (userId) => {
-        const  isuserexist = users.find((user) => user.userId === userId);
-        if(!isuserexist){
-            const user = { userId: userId, socketId: socket.id };
+io.on('connection', socket => {
+    console.log('User Connected!', socket.id);
+
+    //get user information on backend from frontend
+    socket.on('addUser', userId => {
+
+        const userExist = users.find(user => user.userId === userId);
+        if(!userExist)
+        {
+            const user = {userId, socketId: socket.id};
             users.push(user);
-            io.emit('getUsers', users);    
+            io.emit('getUsers', users);
         }
     });
 
 
-    socket.on('sendMessage', async ({ senderId, receiverId, message, conversationId }) => {
+    //send realtime messages to reciever
+    socket.on('sendMessage', async ({conversationId, senderId, message, receiverId }) => {
         const receiver = users.find(user => user.userId === receiverId);
         const sender = users.find(user => user.userId === senderId);
         const user = await Users.findById(senderId);
-        console.log('sender :>> ', sender, receiver);
-        // console.log('user :>> ', user);
-        if (receiver) {
+        console.log('sender:>>', sender);
+        if(receiver){
             io.to(receiver.socketId).to(sender.socketId).emit('getMessage', {
-                senderId,
-                message,
-                conversationId,
+                conversationId, 
+                senderId, 
+                message, 
                 receiverId,
-                user: { id: user._id, username: user.username, email: user.email }
+                user: {id:user._id, email: user.email, username: user.username}
             });
         }
+        else{
+            io.to(sender.socketId).emit('getMessage', {
+                conversationId, 
+                senderId, 
+                message, 
+                receiverId,
+                user: {id:user._id, email: user.email, username: user.username}
+             });
+        }
+    });
 
     socket.on('disconnect', () => {
         users = users.filter(user => user.socketId !== socket.id);
         io.emit('getUsers', users);
-    });
-    // io.emit('getUsers', socket.userId);
-})
-})
+    })
+
+});
+
 
 //connect DB
 require('./db/connection');
@@ -91,10 +105,10 @@ app.post('/api/register', async(req, res, next) => {
             const isAlreadyExistuser = await Users.findOne({username});
 
             if(isAlreadyExist){
-                res.status(400).send("User already exists");
+                res.status(400).send('User already exists');
             }
             else if(isAlreadyExistuser){
-                res.status(400).send("username already exists");
+                res.status(400).send('username already exists');
             }
             else{
 
@@ -177,7 +191,7 @@ app.post('/api/conversation', async(req, res) => {
         const { senderId, receiverId } = req.body;
         const newConversation = new conversations({member: [senderId, receiverId]});
         await newConversation.save();
-        res.status(200).send('conversation created successfully');
+        res.status(200).send('Conversation created successfully');
     } catch (error) {
         console.log(error, 'Error');
     }
@@ -212,7 +226,7 @@ app.post('/api/messages', async(req, res) => {
     try {
         //save convoid, senderid and msg into dataset
         const {conversationId, senderId, message, receiverId='' } = req.body;
-        // console.log(conversationId, senderId, message, receiverId);
+
         if(!senderId || !message) return res.status(400).send("fill all required feilds");
 
         //usefull while making new connections_creating new convo if this is first msg
@@ -221,14 +235,14 @@ app.post('/api/messages', async(req, res) => {
             await newConversation.save();
             const newMessage = new messages({conversationId: newConversation._id, senderId, message});
             await newMessage.save();
-            return res.status(200).send("message sent successfully");
+            return res.status(200).send('Message sent successfully');
         }else if(!conversationId && !receiverId){
             return res.status(400).send("fill all required feilds");
         }
 
         const newMessage = new messages({conversationId, senderId, message});
         await newMessage.save();
-        res.status(200).send("message sent successfully");
+        res.status(200).send('Message sent successfully');
     }catch( error ){
         console.log(error, 'Error');
     }
@@ -244,7 +258,7 @@ app.get('/api/messages/:conversationId', async(req, res) => {
             //find userdata with his/her msg in given conversationid
             const msgSenderdata = Promise.all(msg.map( async(message) => {
                 const user = await Users.findById(message.senderId);
-                return {user: {username: user.username, id:user._id}, message: message.message}
+                return {user: {id:user._id, email: user.email, username: user.username}, message: message.message}
             } ));
 
             res.status(200).json(await msgSenderdata);
@@ -265,6 +279,8 @@ app.get('/api/messages/:conversationId', async(req, res) => {
         } else {
             checkMessages(conversationId);
         }
+
+        
     }catch( error ){
         console.log(error, 'Error');
     }

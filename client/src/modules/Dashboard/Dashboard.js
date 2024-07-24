@@ -5,6 +5,7 @@ import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
 import { io } from 'socket.io-client';
+import { useRef } from 'react';
 
 export const Dashboard = () => {
     const [msgsent, setMsgSent] = useState('');
@@ -20,28 +21,36 @@ export const Dashboard = () => {
     const [messages, setMessages] = useState({});
     const [users, setUsers] = useState([]);
     const [socket, setSocket] = useState(null);
-    // console.log('users :>>', users)
+    const messageRef = useRef(null);
 
-    console.log('messages :>>', messages);
     //connecting socket
     useEffect(() => {
         setSocket(io('http://localhost:8080'))
-    },[]);
+    },[])
 
     useEffect(() => {
-        socket?.emit('addUser', user?.id);
-        socket?.on('getUsers', (users) => {
-            console.log('activeusers :>>', users);
+        socket?.emit('addUser', user?.id)
+
+        //get all active users
+        socket?.on('getUsers', users => {
+            //console.log('Active User:>>', users);
         })
+
+        //get messages
         socket?.on('getMessage', data => {
-            console.log('dataa :>>', data);
-			setMessages((prev )=> ({
-				...prev,
-				msg: [...prev.msg, { user: data.user, message: data.message }]
-			}))
+            //console.log('data:>>', data);
+            setMessages(prev => ({
+                ...prev ,
+                msg: [...prev.msg, {user: data.user, message: data.message}]
+            }))
         })
     },[socket])
 
+
+    //scroll to bottom
+    useEffect(() => {
+        messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+    },[messages?.msg]);
 
     //fetch convoList
     useEffect(() => {
@@ -73,7 +82,7 @@ export const Dashboard = () => {
             setUsers(resData);
         }
         fetchUsers()
-    },[]);
+    },[])
 
     //Fetch Messages
     const fetchMessages = async(conversationId, receiver) => {
@@ -85,7 +94,7 @@ export const Dashboard = () => {
             } 
         });
         const resData = await res.json();
-        console.log(' resData :>>', resData);
+        // console.log(' resData :>>', resData);
         setMessages({msg: resData, receiver, conversationId});
     }
     // send Messages
@@ -96,7 +105,9 @@ export const Dashboard = () => {
             message: msgsent,
             receiverId: messages?.receiver?.receiverId
         }
-        socket?.emit('sendMessage', data);
+
+        socket.emit('sendMessage', data);
+
         // const conversationId = messages?.conversationId
         const res = await fetch(`http://localhost:8000/api/messages`, {
             
@@ -106,6 +117,8 @@ export const Dashboard = () => {
             },
             body: JSON.stringify(data)
         });
+        // const resData = await res.json();
+        // console.log('resData :>>', resData);
         setMsgSent('');
     }
 
@@ -145,7 +158,7 @@ export const Dashboard = () => {
                         }) 
                         :
                         <div className='no-messager'>
-                            <p> No Connections</p>
+                            <p> Start chat</p>
                         </div>
                     }
                 </div>
@@ -180,16 +193,22 @@ export const Dashboard = () => {
                                 if(id === user?.id)
                                 {
                                     return(
-                                        <div className='sent'>
-                                            <p> {message}</p>
-                                        </div>
+                                        <>
+                                            <div className='sent'>
+                                                <p> {message}</p>
+                                            </div>
+                                            <div ref={messageRef}></div>
+                                        </>
                                     )
                                 }
                                 else{
                                     return(
+                                        <>
                                         <div className='received'>
                                             <p>{message}</p>
-                                        </div>  
+                                        </div>
+                                        <div ref={messageRef}></div>
+                                        </>  
                                     )
                                 }
                             }) : <div className='no-message'><p> Start chat</p></div>
@@ -210,7 +229,7 @@ export const Dashboard = () => {
         {/* profile-list */}
         <div className='third'>
             <div className='convo_heading'>
-                <h1 className='msg_heading'>People</h1>
+                <h1 className='msg_heading'>Messages</h1>
             </div>
             <div className='connection-list'>
                 {
@@ -227,7 +246,7 @@ export const Dashboard = () => {
                                 </div>
                             </div>
                         );
-                    })
+                    }) 
                     :
                     <div className='no-messager'>
                         <p> Start chat</p>
