@@ -4,7 +4,7 @@ import mail from '../../assets/mailto.png';
 import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
-import { io } from 'socket.io-client/dist/socket.io';
+import { io } from 'socket.io-client';
 
 export const Dashboard = () => {
     const [msgsent, setMsgSent] = useState('');
@@ -20,13 +20,31 @@ export const Dashboard = () => {
     const [messages, setMessages] = useState({});
     const [users, setUsers] = useState([]);
     const [socket, setSocket] = useState(null);
-    // console.log('users :>>', users)
+    console.log('messages :>>', messages)
 
 
     //connecting socket
     useEffect(() => {
         setSocket(io('http://localhost:8080'))
     },[])
+
+    useEffect(() => {
+        socket?.emit('addUser', user?.id)
+
+        //get all active users
+        socket?.on('getUsers', users => {
+            console.log('Active User:>>', users);
+        })
+
+        //get messages
+        socket?.on('getMessage', data => {
+            console.log('data:>>', data);
+            setMessages(prev => ({
+                ...prev ,
+                msg: [...prev.msg, {user: data.user, message: data.message}]
+            }))
+        })
+    },[socket])
 
 
     //fetch convoList
@@ -71,7 +89,7 @@ export const Dashboard = () => {
             } 
         });
         const resData = await res.json();
-        console.log(' resData :>>', resData);
+        // console.log(' resData :>>', resData);
         setMessages({msg: resData, receiver, conversationId});
     }
     // send Messages
@@ -82,6 +100,9 @@ export const Dashboard = () => {
             message: msgsent,
             receiverId: messages?.receiver?.receiverId
         }
+
+        socket.emit('sendMessage', data);
+
         // const conversationId = messages?.conversationId
         const res = await fetch(`http://localhost:8000/api/messages`, {
             
@@ -91,8 +112,8 @@ export const Dashboard = () => {
             },
             body: JSON.stringify(data)
         });
-        const resData = await res.json();
-        console.log('resData :>>', resData);
+        // const resData = await res.json();
+        // console.log('resData :>>', resData);
         setMsgSent('');
     }
 

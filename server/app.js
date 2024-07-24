@@ -4,6 +4,54 @@ const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const io = require('socket.io')(8080, {
+    cors: {
+        origin: 'http://localhost:3000',
+    }
+});
+
+
+//socket.io
+let users = [];
+io.on('connection', socket => {
+    console.log('User Connected!', socket.id);
+
+    //get user information on backend from frontend
+    socket.on('addUser', userId => {
+
+        const userExist = users.find(user => user.userId === userId);
+        if(!userExist)
+        {
+            const user = {userId, socketId: socket.id};
+            users.push(user);
+            io.emit('getUsers', users);
+        }
+    });
+
+
+    //send realtime messages to reciever
+    socket.on('sendMessage', async ({conversationId, senderId, message, receiverId }) => {
+        const receiver = users.find(user => user.userId === receiverId);
+        const sender = users.find(user => user.userId === senderId);
+        const user = await Users.findById(senderId);
+        if(receiver){
+            io.to(receiver.socketId).to(sender.socketId).emit('getMessage', {
+                conversationId, 
+                senderId, 
+                message, 
+                receiverId,
+                user: {id:user._id, email: user.email, username: user.username}
+            });
+        }
+    });
+
+    socket.on('disconnect', () => {
+        users = users.filter(user => user.socketId !== socket.id);
+        io.emit('getUsers', users);
+    })
+
+});
+
 
 //connect DB
 require('./db/connection');
@@ -200,7 +248,7 @@ app.get('/api/messages/:conversationId', async(req, res) => {
             //find userdata with his/her msg in given conversationid
             const msgSenderdata = Promise.all(msg.map( async(message) => {
                 const user = await Users.findById(message.senderId);
-                return {user: {username: user.username, id:user._id}, message: message.message}
+                return {user: {id:user._id, email: user.email, username: user.username}, message: message.message}
             } ));
 
             res.status(200).json(await msgSenderdata);
