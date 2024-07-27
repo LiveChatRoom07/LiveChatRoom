@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css';
 import Dashboard from './modules/Dashboard/Dashboard.js';
-import Form from './modules/form/Index'
+import Form from './modules/form/Index.js';
+import ChangePassword from './modules/form/ChangePassword.js';
+import Login from './modules/form/Login.js';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
 
@@ -41,6 +43,18 @@ function App() {
           <ProtectedRoute>
             <Form isSignInPage={false} />
           </ProtectedRoute>
+        } />
+
+        <Route path='/user/Login' element={
+          // <ProtectedRoute>
+            <Login />
+          // </ProtectedRoute>
+        } />
+
+        <Route path='/user/Password_Setting' element={
+          // <ProtectedRoute>
+            <ChangePassword />
+          // </ProtectedRoute>
         } />
 
       </Routes>

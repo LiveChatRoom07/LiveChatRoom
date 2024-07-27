@@ -5,7 +5,7 @@ import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
 import { io } from 'socket.io-client';
-import { useRef } from 'react';
+// import { useRef } from 'react';
 
 export const Dashboard = () => {
     const [msgsent, setMsgSent] = useState('');
@@ -22,13 +22,10 @@ export const Dashboard = () => {
     const [users, setUsers] = useState([]);
     const [socket, setSocket] = useState(null);
     const messageRef = useRef(null);
-<<<<<<< HEAD
     const activeUsers = [];
     // const [activeUsers, setActiveUsers] = useState([]);
     // console.log('messages :>>', messages)
 
-=======
->>>>>>> 556d1f5c286164d02f51603d4c4c925f449ac259
 
     //connecting socket
     useEffect(() => {
@@ -40,15 +37,11 @@ export const Dashboard = () => {
 
         //get all active users
         socket?.on('getUsers', users => {
-<<<<<<< HEAD
             // for (user in users){
             //     activeUsers.push(user.userId);
             // }
             
             console.log('Active User:>>', users);
-=======
-            //console.log('Active User:>>', users);
->>>>>>> 556d1f5c286164d02f51603d4c4c925f449ac259
         })
 
         //get messages
@@ -62,18 +55,11 @@ export const Dashboard = () => {
     },[socket])
 
 
-<<<<<<< HEAD
     //reference
     useEffect(() => {
         messageRef?.current?.scrollIntoView({ behavior:'smooth' })
     }, [messages?.msg])
 
-=======
-    //scroll to bottom
-    useEffect(() => {
-        messageRef.current?.scrollIntoView({ behavior: 'smooth' });
-    },[messages?.msg]);
->>>>>>> 556d1f5c286164d02f51603d4c4c925f449ac259
 
     //fetch convoList
     useEffect(() => {
@@ -215,27 +201,16 @@ export const Dashboard = () => {
                                                 <p> {message}</p>
                                             </div>
                                             <div ref={messageRef}></div>
-                                        </>
-<<<<<<< HEAD
-                                        
-=======
->>>>>>> 556d1f5c286164d02f51603d4c4c925f449ac259
+                                        </>                                
                                     )
                                 }
                                 else{
                                     return(
                                         <>
-<<<<<<< HEAD
                                             <div className='received'>
                                                 <p> {message}</p>
                                             </div>
                                             <div ref={messageRef}></div>
-=======
-                                        <div className='received'>
-                                            <p>{message}</p>
-                                        </div>
-                                        <div ref={messageRef}></div>
->>>>>>> 556d1f5c286164d02f51603d4c4c925f449ac259
                                         </>  
                                     )
                                 }
