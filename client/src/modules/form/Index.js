@@ -3,6 +3,7 @@ import Input from '../../components/Input/Input.js'
 import Button from '../../components/Buttons/Button.js'
 import './Index.css'
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // isSignInPage = true for LogIn page
 function Index( {isSignInPage=false} ){
@@ -64,7 +65,7 @@ function Index( {isSignInPage=false} ){
           <Input label="Password" type="password" name="password" placeholder="Enter Password" isrequired="true" value={data.password} onChange={(e) => setData({...data, password: e.target.value}) } />
 
           {/* forgot password option */}
-          {isSignInPage && <div className='password-text'>Forgot Password?</div>}
+          {isSignInPage && <div className='password-text'><Link to="/change-password">Forgot Password?</Link></div>}
 
           {/* LogIn/SignIn button */}
           <Button label= {isSignInPage ? 'Sign in' : 'Sign up'} type="submit"/>
