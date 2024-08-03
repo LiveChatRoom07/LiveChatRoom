@@ -35,7 +35,7 @@ const Login = () => {
       let str = "0123456789"
 
       for(let i = 0; i < 4; i++){
-        const c = Math.floor(Math.random()*str.length + 1)
+        const c = Math.floor(Math.random()*str.length)
         otp += str.charAt(c)
       }
       return otp;
@@ -52,7 +52,7 @@ const Login = () => {
       });
       const resData = await res.json();
       console.log(resData);
-      if(resData == 0)
+      if(resData === 0)
       {
         alert('User not found!')
       }
