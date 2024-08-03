@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Dashboard.css';
 import mail from '../../assets/mailto.png';
 import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
 import { io } from 'socket.io-client';
-import { useRef } from 'react';
+// import { useRef } from 'react';
 
 export const Dashboard = () => {
     const [msgsent, setMsgSent] = useState('');
@@ -22,6 +22,10 @@ export const Dashboard = () => {
     const [users, setUsers] = useState([]);
     const [socket, setSocket] = useState(null);
     const messageRef = useRef(null);
+    const activeUsers = [];
+    // const [activeUsers, setActiveUsers] = useState([]);
+    // console.log('messages :>>', messages)
+
 
     //connecting socket
     useEffect(() => {
@@ -33,7 +37,11 @@ export const Dashboard = () => {
 
         //get all active users
         socket?.on('getUsers', users => {
-            //console.log('Active User:>>', users);
+            // for (user in users){
+            //     activeUsers.push(user.userId);
+            // }
+            
+            console.log('Active User:>>', users);
         })
 
         //get messages
@@ -47,10 +55,11 @@ export const Dashboard = () => {
     },[socket])
 
 
-    //scroll to bottom
+    //reference
     useEffect(() => {
-        messageRef.current?.scrollIntoView({ behavior: 'smooth' });
-    },[messages?.msg]);
+        messageRef?.current?.scrollIntoView({ behavior:'smooth' })
+    }, [messages?.msg])
+
 
     //fetch convoList
     useEffect(() => {
@@ -70,7 +79,6 @@ export const Dashboard = () => {
 
     //fetch all users
     useEffect(() => {
-        // const loggedinUser = JSON.parse(localStorage.getItem('user:detail'))
         const fetchUsers = async() => {
             const res = await fetch(`http://localhost:8000/api/users/${user.id}`, {
                 method: 'GET',
@@ -87,16 +95,15 @@ export const Dashboard = () => {
     //Fetch Messages
     const fetchMessages = async(conversationId, receiver) => {
         const res = await fetch(`http://localhost:8000/api/messages/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`, {
-            // ...(conversationId === 'new' && { body: JSON.stringify({senderId: user?.id, receiverId: messages?.receiver?.receiverId}) }),
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             } 
         });
         const resData = await res.json();
-        // console.log(' resData :>>', resData);
         setMessages({msg: resData, receiver, conversationId});
     }
+
     // send Messages
     const sendMessage = async(e) => {
         const data = {
@@ -108,17 +115,13 @@ export const Dashboard = () => {
 
         socket.emit('sendMessage', data);
 
-        // const conversationId = messages?.conversationId
-        const res = await fetch(`http://localhost:8000/api/messages`, {
-            
+        const res = await fetch(`http://localhost:8000/api/messages`, {            
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
-        // const resData = await res.json();
-        // console.log('resData :>>', resData);
         setMsgSent('');
     }
 
@@ -198,16 +201,16 @@ export const Dashboard = () => {
                                                 <p> {message}</p>
                                             </div>
                                             <div ref={messageRef}></div>
-                                        </>
+                                        </>                                
                                     )
                                 }
                                 else{
                                     return(
                                         <>
-                                        <div className='received'>
-                                            <p>{message}</p>
-                                        </div>
-                                        <div ref={messageRef}></div>
+                                            <div className='received'>
+                                                <p> {message}</p>
+                                            </div>
+                                            <div ref={messageRef}></div>
                                         </>  
                                     )
                                 }

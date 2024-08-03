@@ -43,15 +43,14 @@ io.on('connection', socket => {
                 receiverId,
                 user: {id:user._id, email: user.email, username: user.username}
             });
-        }
-        else{
+        }else{
             io.to(sender.socketId).emit('getMessage', {
                 conversationId, 
                 senderId, 
                 message, 
                 receiverId,
                 user: {id:user._id, email: user.email, username: user.username}
-             });
+            });
         }
     });
 
@@ -301,6 +300,15 @@ app.get('/api/users/:userId', async(req, res) => {
         res.status(200).json(await userdata);
     }
     catch( error ){
+        console.log(error, 'Error');
+    }
+})
+
+app.get('api/finduser', async(req, res) => {
+    try{
+        const isaUser = await Users.find({email});
+        res.status(200).json(isaUser);
+    }catch( error ){
         console.log(error, 'Error');
     }
 })

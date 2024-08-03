@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './ChangePass.css'
 import Input from '../../components/Input/Input.js';
-import {issignInPage} from '../../components/Input/Input.js';
+// import {issignInPage} from '../../components/Input/Input.js';
 import Button from '../../components/Buttons/Button.js'
 
 const ChangePassword = () => {
