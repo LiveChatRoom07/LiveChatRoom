@@ -5,7 +5,6 @@ import send from '../../assets/send.png';
 import profilepic from '../../assets/obanai.jpg';
 import Input from '../../components/Input/Input';
 import { io } from 'socket.io-client';
-// import { useRef } from 'react';
 
 export const Dashboard = () => {
     const [msgsent, setMsgSent] = useState('');

@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Login.css'
 import Input from '../../components/Input/Input.js'
 import Button from '../../components/Buttons/Button'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { io } from 'socket.io-client';
 
 const Login = () => {
 
+  const [socket, setSocket] = useState(null);
   const navigate = useNavigate()
 
     //store email id and OTP
     const[data1, setData] = useState({
-        Email:'',
+        email:'',
         A:'',
         B:'',
         C:'',
@@ -20,26 +22,64 @@ const Login = () => {
 
     //   console.log('data :>>', data1); 
 
+    
+    //set socket
+    // useEffect(() => {
+    //   setSocket(io('http://localhost:8080'))
+    // },[])
+
+
+    //generate random OTP
+    const genOTP = () => {
+      let otp = ""
+      let str = "0123456789"
+
+      for(let i = 0; i < 4; i++){
+        const c = Math.floor(Math.random()*str.length + 1)
+        otp += str.charAt(c)
+      }
+      return otp;
+    }
+
+    //comparing user email
+    const findUser = async(e,email) => {
+      e.preventDefault();//prevent page reload
+      const res = await fetch(`http://localhost:8000/api/findUser/${email}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        } 
+      });
+      const resData = await res.json();
+      console.log(resData);
+      if(resData == 0)
+      {
+        alert('User not found!')
+      }
+      else{
+        const otp = genOTP();
+        console.log(otp);
+      }
+    }
+
   return (
 
     <div className='box1'>
 
-        <form onSubmit={(e) => {
-          setData({OTP: data1.A+data1.B+data1.C+data1.D})
-          e.preventDefault();
-          console.log('Right!');
-          navigate('/user/Password_Setting')
-        }}>
+        <form onSubmit={(e) => findUser(e,data1.email)}>
 
             <div className='email'>
 
                 {/* //take email */}
-                <Input label="E-mail" type="email" name="email" placeholder="Email Address" isrequired="true" value={data1.Email} onChange={(e) => setData({...data1, Email: e.target.value}) }/>
+                <Input label="E-mail" type="email" name="email" placeholder="Email Address" isrequired="true" value={data1.email} onChange={(e) => setData({...data1, email: e.target.value}) }/>
 
                 {/* send otp btn */}
-                <Button label='Generate OTP' />    
+                <Button label='Generate OTP' type='submit'/>    
 
             </div>
+
+        </form>
+        <form>
 
             <div className='otp'>
 
@@ -61,3 +101,11 @@ const Login = () => {
 }
 
 export default Login
+
+
+
+//onSubmit={(e) => {
+//   e.preventDefault();
+//   setData({OTP: data1.A+data1.B+data1.C+data1.D})
+//   navigate('/user/Password_Setting')
+// }}

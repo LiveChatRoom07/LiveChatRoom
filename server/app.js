@@ -182,6 +182,26 @@ app.post('/api/login', async(req, res, next) => {
 })
 
 
+//comparing email for generate OTP
+app.get('/api/findUser/:email', async(req, res, next) => {
+    try{
+        
+        const email = req.params.email;
+        const isAlreadyExist = await Users.findOne( {email} );
+        // if{isAlreadyExist}
+        // console.log(isAlreadyExist);
+        // res.status(200).send('Email found');
+        if(!isAlreadyExist)
+            res.status(200).json(0);
+        else
+            res.status(200).json(1);
+
+    } catch (error) {
+        console.log('error:', error);
+    }
+})
+
+
 //conversation Routes_store convo_id
 app.post('/api/conversation', async(req, res) => {
     try {
