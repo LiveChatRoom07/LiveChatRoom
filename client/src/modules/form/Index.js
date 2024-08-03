@@ -3,6 +3,7 @@ import Input from '../../components/Input/Input.js'
 import Button from '../../components/Buttons/Button.js'
 import './Index.css'
 import { useNavigate } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 
 // isSignInPage = true for LogIn page
 function Index( {isSignInPage=false} ){

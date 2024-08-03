@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import './Login.css'
-import Input from '../../components/Input/Input.js'
-import Button from '../../components/Buttons/Button'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { io } from 'socket.io-client';
+import React, { useState, useEffect } from 'react';
+import './Login.css';
+import Input from '../../components/Input/Input.js';
+import Button from '../../components/Buttons/Button';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-  const [socket, setSocket] = useState(null);
+  // const [socket, setSocket] = useState(null);
   const navigate = useNavigate()
 
     //store email id and OTP
@@ -20,30 +19,12 @@ const Login = () => {
         OTP:''
       })
 
-    //   console.log('data :>>', data1); 
-
     
-    //set socket
-    // useEffect(() => {
-    //   setSocket(io('http://localhost:8080'))
-    // },[])
 
-
-    //generate random OTP
-    const genOTP = () => {
-      let otp = ""
-      let str = "0123456789"
-
-      for(let i = 0; i < 4; i++){
-        const c = Math.floor(Math.random()*str.length)
-        otp += str.charAt(c)
-      }
-      return otp;
-    }
-
-    //comparing user email
+    //comparing user email and sending OTP
     const findUser = async(e,email) => {
       e.preventDefault();//prevent page reload
+      try{
       const res = await fetch(`http://localhost:8000/api/findUser/${email}`, {
         method: 'GET',
         headers: {
@@ -52,15 +33,33 @@ const Login = () => {
       });
       const resData = await res.json();
       console.log(resData);
-      if(resData === 0)
-      {
-        alert('User not found!')
+      if(resData === 1){
+        const otp=Math.floor(1000 + Math.random() * 9000);
+        console.log(otp);
+        //send OTP to user email
+        const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          }, 
+          body: JSON.stringify({otp})
+        });
+        
+        console.log('response:', response);
+        if (!response.ok) {
+          throw new Error('Failed to send recovery email');
+        }
+          const resedata = await response.json();
+          console.log(resedata);
       }
       else{
-        const otp = genOTP();
-        console.log(otp);
+        console.log('User not found');
       }
     }
+    catch(error){
+      console.log('Failed to find user');
+    }
+  };
 
   return (
 

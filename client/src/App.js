@@ -46,15 +46,15 @@ function App() {
         } />
 
         <Route path='/user/Login' element={
-          // <ProtectedRoute>
+          <ProtectedRoute>
             <Login />
-          // </ProtectedRoute>
+          </ProtectedRoute>
         } />
 
         <Route path='/user/Password_Setting' element={
-          // <ProtectedRoute>
+          <ProtectedRoute>
             <ChangePassword />
-          // </ProtectedRoute>
+          </ProtectedRoute>
         } />
 
       </Routes>

@@ -4,6 +4,8 @@ const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+// const nodemailer = require('nodemailer');
+const { sendEmail } = require('./Autoemail');
 const io = require('socket.io')(8080, {
     cors: {
         origin: 'http://localhost:3000',
@@ -200,9 +202,8 @@ app.post('/api/login', async(req, res, next) => {
     }
 })
 
-
 //comparing email for generate OTP
-app.get('/api/findUser/:email', async(req, res, next) => {
+app.get('/api/findUser/:email', async(req, res) => {
     try{
         
         const email = req.params.email;
@@ -220,6 +221,20 @@ app.get('/api/findUser/:email', async(req, res, next) => {
     }
 })
 
+// Send recovery email with OTP
+app.post('/api/send_recovery_email/:email', async(req, res) => {
+    const {otp}=req.body;
+    const email = req.params.email;
+    const subject = 'Your OTP Code';
+    const text = `Your OTP code is ${otp}`;
+    try {
+        await sendEmail(email, subject, text);
+        res.status(200).send({ message: 'Recovery email sent', otp: otp });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).send({ message: 'Failed to send recovery email', error });
+    }
+  });
 
 //conversation Routes_store convo_id
 app.post('/api/conversation', async(req, res) => {
