@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "nodemailer": "^6.9.14",
     "npx": "^10.2.2",
     "react-router-dom": "^6.25.1",
     "react-script": "^2.0.5"

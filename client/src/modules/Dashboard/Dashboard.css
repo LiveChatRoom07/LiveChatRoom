@@ -12,6 +12,7 @@
     width: 25vw;
     height: 100vh;
     border-right: 1px solid rgba(0, 0, 0, 0.2);
+    overflow-y: scroll;
 }
 /* for my profile */
 .myprofile{
@@ -335,6 +336,7 @@
     background-color: whitesmoke;
     width: 25vw;
     height: 100vh;
+    overflow-y: scroll;
 }
 .connection-list{
     overflow-y: scroll;
