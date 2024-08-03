@@ -21,7 +21,7 @@ export const Dashboard = () => {
     const [users, setUsers] = useState([]);
     const [socket, setSocket] = useState(null);
     const messageRef = useRef(null);
-    const activeUsers = [];
+    const [activeUsers, setActiveUsers] = useState([]);
     // const [activeUsers, setActiveUsers] = useState([]);
     // console.log('messages :>>', messages)
 
@@ -35,12 +35,9 @@ export const Dashboard = () => {
         socket?.emit('addUser', user?.id)
 
         //get all active users
-        socket?.on('getUsers', users => {
-            // for (user in users){
-            //     activeUsers.push(user.userId);
-            // }
-            
-            console.log('Active User:>>', users);
+        socket?.on('getUsers', activeUsers => {
+            setActiveUsers(activeUsers)
+            // console.log('Active User:>>', activeUsers);
         })
 
         //get messages
@@ -54,6 +51,7 @@ export const Dashboard = () => {
     },[socket])
 
 
+    // console.log('Active_User:>>', activeUsers)
     //reference
     useEffect(() => {
         messageRef?.current?.scrollIntoView({ behavior:'smooth' })

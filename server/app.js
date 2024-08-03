@@ -14,27 +14,27 @@ const io = require('socket.io')(8080, {
 
 
 //socket.io
-let users = [];
+let activeUsers = [];
 io.on('connection', socket => {
     console.log('User Connected!', socket.id);
 
     //get user information on backend from frontend
     socket.on('addUser', userId => {
 
-        const userExist = users.find(user => user.userId === userId);
+        const userExist = activeUsers.find(user => user.userId === userId);
         if(!userExist)
         {
             const user = {userId, socketId: socket.id};
-            users.push(user);
-            io.emit('getUsers', users);
+            activeUsers.push(user);
+            io.emit('getUsers', activeUsers);
         }
     });
 
 
     //send realtime messages to reciever
     socket.on('sendMessage', async ({conversationId, senderId, message, receiverId }) => {
-        const receiver = users.find(user => user.userId === receiverId);
-        const sender = users.find(user => user.userId === senderId);
+        const receiver = activeUsers.find(user => user.userId === receiverId);
+        const sender = activeUsers.find(user => user.userId === senderId);
         const user = await Users.findById(senderId);
         console.log('sender:>>', sender);
         if(receiver){
@@ -57,8 +57,8 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        users = users.filter(user => user.socketId !== socket.id);
-        io.emit('getUsers', users);
+        activeUsers = activeUsers.filter(user => user.socketId !== socket.id);
+        io.emit('getUsers', activeUsers);
     })
 
 });
@@ -119,11 +119,30 @@ app.post('/api/register', async(req, res, next) => {
                 //save encrypted password
                 bcryptjs.hash(password, 10, (err, hashedpassword) => {
                     newUser.set('password', hashedpassword);
-                    newUser.save();
-                    next();
+                    // newUser.save();
+                    // next();
+                    const payload = {
+                        email: newUser.email,
+                        name: newUser.username
+                    }
+                    const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'THIS_IS_A_JWT_SECRET_KEY';
+        
+                        //create and set token using secret key and payload, set that user will remains log in for 24 hours
+                    jwt.sign(payload, JWT_SECRET_KEY, {expiresIn: 86400}, async (err, token) => {
+                        // await Users.updateOne({email: newUser.email}, { 
+                        //     $set: { token } 
+                        // })
+                        newUser.set({token})
+                        newUser.save();
+                        return res.status(200).json({ user: { id: newUser._id, email: newUser.email, username: newUser.username }, token: token })
+                    } )
+                    
+                    // next();
                 })
-                return res.status(200).send('User registered successfully');
+                // res.status(200).send('User registered successfully');
             }
+            // const user = await Users.findOne({username});
+
         }
     } catch (error) {
         console.log('error:', error);
@@ -326,9 +345,10 @@ app.get('/api/users/:userId', async(req, res) => {
     try{
         const userId = req.params.userId;
         const users = await Users.find( {_id : {$ne : userId}});
+        const sort = users.sort((a, b) => (a.username < b.username ? -1 : 1));
 
         //get user data
-        const userdata = Promise.all(users.map( async(user) => 
+        const userdata = Promise.all(sort.map( async(user) => 
         {
             return{user: {username: user.username, email: user.email, receiverId: user._id}}
         }));

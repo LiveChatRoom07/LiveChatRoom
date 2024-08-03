@@ -333,6 +333,8 @@
 }
 /* for users you may connect with page */
 .third{
+    overflow-y:scroll;
+    scrollbar-width: none;
     background-color: whitesmoke;
     width: 25vw;
     height: 100vh;
