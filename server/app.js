@@ -223,13 +223,13 @@ app.get('/api/findUser/:email', async(req, res) => {
 
 // Send recovery email with OTP
 app.post('/api/send_recovery_email/:email', async(req, res) => {
-    const {otp}=req.body;
+    const {OTP}=req.body;
     const email = req.params.email;
     const subject = 'Your OTP Code';
-    const text = `Your OTP code is ${otp}`;
+    const text = `Your OTP code is ${OTP}`;
     try {
         await sendEmail(email, subject, text);
-        res.status(200).send({ message: 'Recovery email sent', otp: otp });
+        res.status(200).send({ message: 'Recovery email sent', OTP: OTP });
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).send({ message: 'Failed to send recovery email', error });

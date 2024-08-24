@@ -20,9 +20,30 @@
 }
 
 /* container of otp input feild */
-.otp{
+.otp-container{
     display: flex;
     width: 100px;
+    align-items: center;
+    margin-right: 335px;
+    margin-top: 20px;
+}
+
+.otp-box{
+    display: flex;
+}
+
+.otp-box input{
+    background-color: var(--disable);
+    border-radius: 5px;
+    padding: 0.5rem;
+    border: 1px solid var(--disable);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    color: var(--text);
+    width: 25px;
+    height: 20px;
+    outline: none;
+    margin-right: 25px;
+    margin-top: 5px;
 }
 
 /* Generate-otp btn */
@@ -38,8 +59,9 @@
 }
 
 /* submit button */
-.otp button{
+.otp-container button{
     width: 100%;
     height: 50%;
-    margin-left: 20px;
+    margin-left: 25px;
+    margin-bottom: 10px;
 }

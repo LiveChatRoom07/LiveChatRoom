@@ -10,16 +10,22 @@ const Login = () => {
   const navigate = useNavigate()
 
     //store email id and OTP
-    const[data1, setData] = useState({
-        email:'',
-        A:'',
-        B:'',
-        C:'',
-        D:'',
-        OTP:''
-      })
+    const[email, setData] = useState("")
 
-    
+    const [otp, setOtp] = useState(new Array(4).fill(""))
+
+    // let data = 0;
+    const handleSubmit = (e, i) => {
+        if(isNaN(e.target.value)) return false;
+
+        setOtp([...otp.map((data,ind) => (ind === i? e.target.value:data))]);
+
+        if(e.target.value && e.target.nextSibling){
+          e.target.nextSibling.focus()
+        }
+    }
+
+    const OTP = Math.floor(1000 + Math.random() * 9000);
 
     //comparing user email and sending OTP
     const findUser = async(e,email) => {
@@ -34,15 +40,15 @@ const Login = () => {
       const resData = await res.json();
       console.log(resData);
       if(resData === 1){
-        const otp=Math.floor(1000 + Math.random() * 9000);
-        console.log(otp);
+        // setOTP(O);
+        console.log(OTP);
         //send OTP to user email
         const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
           }, 
-          body: JSON.stringify({otp})
+          body: JSON.stringify({OTP})
         });
         
         console.log('response:', response);
@@ -53,7 +59,7 @@ const Login = () => {
           console.log(resedata);
       }
       else{
-        console.log('User not found');
+        alert('User not found');
       }
     }
     catch(error){
@@ -61,16 +67,30 @@ const Login = () => {
     }
   };
 
+  console.log(OTP);
+  //compare OTP
+  const checkOtp = async(e) => {
+    e.preventDefault();
+    // setData({...data1, otp: data1.A+data1.B+data1.C+data1.D})
+    console.log('OTP:', OTP, otp);
+    if(OTP === otp)
+      navigate('/user/Password_Setting')
+    else
+      alert('Invalid OTP!')
+  }
+
+
+
   return (
 
     <div className='box1'>
 
-        <form onSubmit={(e) => findUser(e,data1.email)}>
+        <form onSubmit={(e) => findUser(e,email)}>
 
             <div className='email'>
 
                 {/* //take email */}
-                <Input label="E-mail" type="email" name="email" placeholder="Email Address" isrequired="true" value={data1.email} onChange={(e) => setData({...data1, email: e.target.value}) }/>
+                <Input label="E-mail" type="email" name="email" placeholder="Email Address" isrequired="true" value={email} onChange={(e) => setData(e.target.value) }/>
 
                 {/* send otp btn */}
                 <Button label='Generate OTP' type='submit'/>    
@@ -78,15 +98,25 @@ const Login = () => {
             </div>
 
         </form>
-        <form>
+        <form onSubmit={(e) => checkOtp(e)}>
 
-            <div className='otp'>
+            <div className='otp-container'>
 
-                {/* take 4 numbers of otp as input */}
+              <div className='otp-box'>
+                {
+                    otp.map((data, i) => {
+                        return <input type="text" value={data} maxLength={1} onChange={(e) => handleSubmit(e,i)} />
+                    })
+                
+                }
+
+              </div>
+                {/* take 4 numbers of otp as input
+                
                 <Input type='text' isrequired='true' length='1' value={data1.A} onChange={(e) => setData({...data1, A: e.target.value}) }/>
                 <Input type='text' isrequired='true' length='1' value={data1.B} onChange={(e) => setData({...data1, B: e.target.value}) }/>
                 <Input type='text' isrequired='true' length='1' value={data1.C} onChange={(e) => setData({...data1, C: e.target.value}) } />
-                <Input type='text' isrequired='true' length='1' value={data1.D} onChange={(e) => setData({...data1, D: e.target.value}) }/>
+                <Input type='text' isrequired='true' length='1' value={data1.D} onChange={(e) => setData({...data1, D: e.target.value, otp: data1.A+data1.B+data1.C+e.target.value}) }/>
 
                 {/* submit btn */}
                 <Button label='Submit' type='submit'/>
