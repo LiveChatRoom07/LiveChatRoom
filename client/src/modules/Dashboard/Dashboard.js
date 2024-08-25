@@ -7,6 +7,9 @@ import Input from '../../components/Input/Input';
 import { io } from 'socket.io-client';
 
 export const Dashboard = () => {
+
+    let lastmessage;
+
     const [msgsent, setMsgSent] = useState('');
     const handlemsg = (e) => {
         setMsgSent(e.target.value);
@@ -48,9 +51,26 @@ export const Dashboard = () => {
                 msg: [...prev.msg, {user: data.user, message: data.message}]
             }))
         })
+
+        
     },[socket])
 
-
+    //user status
+    useEffect(() => {
+        //get user status offline
+        socket?.on('userDisconnect', (user) => {
+            userStatus(user.userId, 'false');
+        })
+    },[socket]);
+    const userStatus = (userId, status) => {
+        const userstatusdisplay = document.getElementsByClassName(`chat-status-${userId}`)[0];
+        if(status==='false'){
+            userstatusdisplay[0].innerText = 'offline';
+        }
+        else{
+            userstatusdisplay.classlist.toggle('online');
+        }
+    }
     // console.log('Active_User:>>', activeUsers)
     //reference
     useEffect(() => {
@@ -120,6 +140,7 @@ export const Dashboard = () => {
             body: JSON.stringify(data)
         });
         setMsgSent('');
+        lastmessage = data.message;
     }
 
   return (
@@ -177,7 +198,7 @@ export const Dashboard = () => {
                             </div>
                             <div className='chat-info'>
                                 <h1 className='chat-username'>{messages?.receiver?.username}</h1>
-                                <p className='chat-status'>{messages?.receiver?.email}</p>
+                                <p className='chat-status'></p>
                             </div>
                         </div>
                         <div className='mail-forward'>

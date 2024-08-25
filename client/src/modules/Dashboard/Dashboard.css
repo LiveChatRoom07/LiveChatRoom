@@ -13,6 +13,7 @@
     height: 100vh;
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     overflow-y: scroll;
+    scrollbar-width: none;
 }
 /* for my profile */
 .myprofile{
@@ -57,14 +58,13 @@
     font-family: 'kumbh-sans', sans-serif;
     font-weight: 500;
 }
-
 /* for connections portion */
 .myconnections{
     /* height: ; */
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    scrollbar-width: thin;
+    scrollbar-width: none;
 }
 .msg_heading{
     margin-top: 30px;

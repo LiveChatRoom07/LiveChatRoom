@@ -18,8 +18,8 @@ const Login = () => {
         D:'',
         OTP:''
       })
-
-    
+      
+      const otp=Math.floor(1000 + Math.random() * 9000);
 
     //comparing user email and sending OTP
     const findUser = async(e,email) => {
@@ -34,7 +34,7 @@ const Login = () => {
       const resData = await res.json();
       console.log(resData);
       if(resData === 1){
-        const otp=Math.floor(1000 + Math.random() * 9000);
+        
         console.log(otp);
         //send OTP to user email
         const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
@@ -44,6 +44,7 @@ const Login = () => {
           }, 
           body: JSON.stringify({otp})
         });
+        console.log(otp);
         
         console.log('response:', response);
         if (!response.ok) {
