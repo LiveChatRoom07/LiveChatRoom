@@ -9,17 +9,12 @@ const Login = () => {
   // const [socket, setSocket] = useState(null);
   const navigate = useNavigate()
 
+    const[otp, setOtp] = useState(new Array(4).fill(""));
     //store email id and OTP
-    const[data1, setData] = useState({
-        email:'',
-        A:'',
-        B:'',
-        C:'',
-        D:'',
-        OTP:''
-      })
+    // const[OTP, setOTP] = useState('');
+    const[email, setEmail] = useState('');
       
-      const otp=Math.floor(1000 + Math.random() * 9000);
+    const OTP=Math.floor(1000 + Math.random() * 9000);
 
     //comparing user email and sending OTP
     const findUser = async(e,email) => {
@@ -35,7 +30,7 @@ const Login = () => {
       console.log(resData);
       if(resData === 1){
         
-        console.log(otp);
+        console.log(OTP);
         //send OTP to user email
         const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
           method: 'POST',
@@ -44,7 +39,7 @@ const Login = () => {
           }, 
           body: JSON.stringify({OTP})
         });
-        console.log(otp);
+        console.log(OTP);
         
         console.log('response:', response);
         if (!response.ok) {
@@ -74,6 +69,15 @@ const Login = () => {
       alert('Invalid OTP!')
   }
 
+  const handleSubmit = async(e, i) => {
+    if(isNaN(e.target.value)) return false;
+    setOtp([...otp.map((data, indx)=>(indx === i? e.target.value:data))]);
+
+    if(e.target.value && e.target.nextSibling)
+    {
+      e.target.nextSibling.focus()
+    }
+  }
 
 
   return (
@@ -85,7 +89,7 @@ const Login = () => {
             <div className='email'>
 
                 {/* //take email */}
-                <Input label="E-mail" type="email" name="email" placeholder="Email Address" isrequired="true" value={email} onChange={(e) => setData(e.target.value) }/>
+                <Input label="E-mail" type="email" name="email" placeholder="Email Address" isrequired="true" value={email} onChange={(e) => setEmail(e.target.value) }/>
 
                 {/* send otp btn */}
                 <Button label='Generate OTP' type='submit'/>    
@@ -106,15 +110,7 @@ const Login = () => {
                 }
 
               </div>
-                {/* take 4 numbers of otp as input
-                
-                <Input type='text' isrequired='true' length='1' value={data1.A} onChange={(e) => setData({...data1, A: e.target.value}) }/>
-                <Input type='text' isrequired='true' length='1' value={data1.B} onChange={(e) => setData({...data1, B: e.target.value}) }/>
-                <Input type='text' isrequired='true' length='1' value={data1.C} onChange={(e) => setData({...data1, C: e.target.value}) } />
-                <Input type='text' isrequired='true' length='1' value={data1.D} onChange={(e) => setData({...data1, D: e.target.value, otp: data1.A+data1.B+data1.C+e.target.value}) }/>
-
-                {/* submit btn */}
-                <Button label='Submit' type='submit'/>
+              <Button label='Submit' type='submit'/>
 
             </div>
 
