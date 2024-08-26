@@ -12,6 +12,22 @@ const io = require('socket.io')(8080, {
     }
 });
 
+//connect DB
+require('./db/connection');
+
+
+//import files
+const Users = require('./Models/Users');
+const messages = require('./Models/Messages');
+const conversations = require('./Models/Conversations');
+
+//app use
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+const port = process.env.PORT || 8000;
+
 
 //socket.io
 let activeUsers = [];
@@ -36,7 +52,24 @@ io.on('connection', socket => {
         const receiver = activeUsers.find(user => user.userId === receiverId);
         const sender = activeUsers.find(user => user.userId === senderId);
         const user = await Users.findById(senderId);
-        console.log('sender:>>', sender);
+        // console.log('sender:>>', sender);
+        // Save the message to the database
+        let newMessage;
+        if (conversationId === 'new' && receiverId) {
+            const newConversation = new Conversation({ member: [senderId, receiverId] });
+            await newConversation.save();
+            newMessage = new messages({ conversationId: newConversation._id, senderId, message });
+        } else {
+            newMessage = new messages({ conversationId, senderId, message });
+        }
+
+        try {
+            await newMessage.save();
+        } catch (error) {
+            console.error('Error saving message:', error);
+            return;
+        }
+
         if(receiver){
             io.to(receiver.socketId).to(sender.socketId).emit('getMessage', {
                 conversationId, 
@@ -57,28 +90,15 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        activeUsers = activeUsers.filter(user => user.socketId !== socket.id);
-        io.emit('getUsers', activeUsers);
+        const userstatus = activeUsers.find(user => user.socketId === socket.id);
+        if(userstatus){
+            activeUsers = activeUsers.filter(user => user.socketId !== socket.id);
+            io.emit('getUsers', activeUsers);
+            io.emit('userDisconnect', userstatus.userId);
+        }
     })
 
 });
-
-
-//connect DB
-require('./db/connection');
-
-
-//import files
-const Users = require('./Models/Users');
-const messages = require('./Models/Messages');
-const conversations = require('./Models/Conversations');
-
-//app use
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-const port = process.env.PORT || 8000;
 
 
 //Routes
@@ -244,6 +264,10 @@ app.post('/api/conversation', async(req, res) => {
         const { senderId, receiverId } = req.body;
         const newConversation = new conversations({member: [senderId, receiverId]});
         await newConversation.save();
+        io.emit('newConversation', {
+            conversationId: newConversation._id,
+            members: [senderId, receiverId]
+        });
         res.status(200).send('Conversation created successfully');
     } catch (error) {
         console.log(error, 'Error');
@@ -287,14 +311,14 @@ app.post('/api/messages', async(req, res) => {
             const newConversation = new conversations({member: [senderId, receiverId]});
             await newConversation.save();
             const newMessage = new messages({conversationId: newConversation._id, senderId, message});
-            await newMessage.save();
+            // await newMessage.save();
             return res.status(200).send('Message sent successfully');
         }else if(!conversationId && !receiverId){
             return res.status(400).send("fill all required feilds");
         }
 
         const newMessage = new messages({conversationId, senderId, message});
-        await newMessage.save();
+        // await newMessage.save();
         res.status(200).send('Message sent successfully');
     }catch( error ){
         console.log(error, 'Error');

@@ -10,22 +10,16 @@ const Login = () => {
   const navigate = useNavigate()
 
     //store email id and OTP
-    const[email, setData] = useState("")
-
-    const [otp, setOtp] = useState(new Array(4).fill(""))
-
-    // let data = 0;
-    const handleSubmit = (e, i) => {
-        if(isNaN(e.target.value)) return false;
-
-        setOtp([...otp.map((data,ind) => (ind === i? e.target.value:data))]);
-
-        if(e.target.value && e.target.nextSibling){
-          e.target.nextSibling.focus()
-        }
-    }
-
-    const OTP = Math.floor(1000 + Math.random() * 9000);
+    const[data1, setData] = useState({
+        email:'',
+        A:'',
+        B:'',
+        C:'',
+        D:'',
+        OTP:''
+      })
+      
+      const otp=Math.floor(1000 + Math.random() * 9000);
 
     //comparing user email and sending OTP
     const findUser = async(e,email) => {
@@ -40,8 +34,8 @@ const Login = () => {
       const resData = await res.json();
       console.log(resData);
       if(resData === 1){
-        // setOTP(O);
-        console.log(OTP);
+        
+        console.log(otp);
         //send OTP to user email
         const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
           method: 'POST',
@@ -50,6 +44,7 @@ const Login = () => {
           }, 
           body: JSON.stringify({OTP})
         });
+        console.log(otp);
         
         console.log('response:', response);
         if (!response.ok) {
