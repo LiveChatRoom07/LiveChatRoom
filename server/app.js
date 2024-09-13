@@ -1,5 +1,6 @@
 
 //import important
+// import React, { useState } from 'react';
 const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -46,7 +47,6 @@ io.on('connection', socket => {
             io.emit('getUsers', activeUsers);
         }
     });
-
 
     //send realtime messages to reciever
     socket.on('sendMessage', async ({conversationId, senderId, message, receiverId }) => {
@@ -223,11 +223,14 @@ app.post('/api/login', async(req, res, next) => {
     }
 })
 
+
+let Email = 0; 
 //comparing email for generate OTP
 app.get('/api/findUser/:email', async(req, res) => {
     try{
         
         const email = req.params.email;
+        Email = email;
         const isAlreadyExist = await Users.findOne( {email} );
         // if{isAlreadyExist}
         // console.log(isAlreadyExist);
@@ -248,31 +251,62 @@ app.post('/api/send_recovery_email/:email', async(req, res) => {
     const email = req.params.email;
     const subject = 'Your OTP Code';
     const text = `Your OTP code is ${OTP}`;
+    const user = await Users.findOne({email});        
     try {
         await sendEmail(email, subject, text);
-        res.status(200).send({ message: 'Recovery email sent', OTP: OTP });
+        // res.status(200).send({ message: 'Recovery email sent', OTP: OTP });
+        return res.status(200).json(user.email)
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).send({ message: 'Failed to send recovery email', error });
     }
   });
 
-// Compare OTP
-// app.post('/api/compare-otp', async (req, res) => {
-//     const { email, otp } = req.body;
 
-//     try {
-//         const storedOtp = await Otp.findOne({ email, otp });
-//         if (storedOtp && storedOtp === otp) {
-//             res.json({ valid: true });
-//         } else {
-//             res.json({ valid: false });
-//         }
-//     } catch (error) {
-//         console.error('Error comparing OTP:', error);
-//         res.status(500).json({ valid: false, error: 'Internal Server Error' });
-//     }
-// });
+//change password
+app.post('/api/change_password', async(req, res, next) => {
+    try{
+        const { email, password} = req.body;
+        console.log(email)
+        if (!email || !password) {
+            res.status(400).send('Please enter all fields');
+        }
+        else{
+
+
+            //find that userName is already exits or not and if not then response an error
+            const user = await Users.findOne({email});
+            if(!user){
+                res.status(400).send('Username or password is incorrect');
+            }
+            else{
+                //save encrypted password
+                bcryptjs.hash(password, 10, (err, hashedpassword) => {
+                    user.set('password', hashedpassword);
+                    const payload = {
+                        userid: user._id,
+                        name: user.username
+                    }
+                    const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'THIS_IS_A_JWT_SECRET_KEY';
+
+                    jwt.sign(payload, JWT_SECRET_KEY, {expiresIn: 86400}, async (err, token) => {
+                        await Users.updateOne({_id: user._id}, { 
+                            $set: { token } 
+                        })
+                        user.save();
+                        return res.status(200).json({ user: { id: user._id, email: user.email, username: user.username }, token: token })
+                    } )
+                } )
+                
+            };
+
+        }
+
+    }catch (error) {
+        console.log(error, 'Error');
+    }
+})
+
 
 //conversation Routes_store convo_id
 app.post('/api/conversation', async(req, res) => {

@@ -30,7 +30,6 @@ const Login = () => {
       if(resData === 1){  
       const OTP=Math.floor(1000 + Math.random() * 9000);
         console.log(OTP);
-
         setOtpsave(OTP);
         //send OTP to user email
         const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
@@ -43,11 +42,12 @@ const Login = () => {
         console.log(OTP);
         
         console.log('response:', response);
-        if (!response.ok) {
+        if (response.status === 500) {
           throw new Error('Failed to send recovery email');
         }
           const resedata = await response.json();
-          console.log(resedata);
+          localStorage.setItem('user:email', resedata)
+          console.log('resedata:',resedata);
       }
       else{
         alert('User not found');
