@@ -10,10 +10,11 @@ const Login = () => {
   const navigate = useNavigate()
 
     const[otp, setOtp] = useState(new Array(4).fill(""));
+
     //store email id and OTP
-    // const[OTP, setOTP] = useState('');
     const[email, setEmail] = useState('');
-    let otpsave=0;
+    const[otpsave, setOtpsave] = useState('');
+
     //comparing user email and sending OTP
     const findUser = async(e,email) => {
       e.preventDefault();//prevent page reload
@@ -29,7 +30,8 @@ const Login = () => {
       if(resData === 1){  
       const OTP=Math.floor(1000 + Math.random() * 9000);
         console.log(OTP);
-        otpsave=OTP;
+
+        setOtpsave(OTP);
         //send OTP to user email
         const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
           method: 'POST',
@@ -55,42 +57,22 @@ const Login = () => {
       console.log('Failed to find user');
     }
   };
-  //console.log(OTP);
 
   //compare OTP
   const checkOtp = async (e) => {
         e.preventDefault();
         const otpCode = otp.join('');
         console.log('Your entered OTP is:', otpCode);
-
-        try {
-            const response = await fetch('http://localhost:8000/api/compare-otp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, otp: otpCode })
-            });
-            const data = await response.json();
-            if (data.valid) {
-                navigate('/user/Password_Setting');
-            } else {
-                alert('Invalid OTP!');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while verifying the OTP.');
+        console.log('Your Saved OTP is:', otpsave);
+        if(otpCode == otpsave)
+        {
+          navigate('/user/Password_Setting');
+        }
+        else {
+          alert('Invalid OTP!');
         }
     };
 
-    // const handleOtpChange = (e, index) => {
-    //   const value = e.target.value;
-    //   if (/^[0-9]$/.test(value)) {
-    //       const newOtp = [...otp];
-    //       newOtp[index] = value;
-    //       setOtp(newOtp);
-    //   }
-    // };
   const handleSubmit = async(e, i) => {
     e.preventDefault();
     if(isNaN(e.target.value)) return false;
@@ -101,7 +83,6 @@ const Login = () => {
       e.target.nextSibling.focus()
     }
   }
-
 
   return (
 
