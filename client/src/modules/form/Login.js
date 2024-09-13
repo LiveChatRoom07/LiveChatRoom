@@ -70,6 +70,7 @@ const Login = () => {
   }
 
   const handleSubmit = async(e, i) => {
+    e.preventDefault();
     if(isNaN(e.target.value)) return false;
     setOtp([...otp.map((data, indx)=>(indx === i? e.target.value:data))]);
 
