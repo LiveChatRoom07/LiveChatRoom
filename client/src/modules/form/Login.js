@@ -13,9 +13,7 @@ const Login = () => {
     //store email id and OTP
     // const[OTP, setOTP] = useState('');
     const[email, setEmail] = useState('');
-      
-    const OTP=Math.floor(1000 + Math.random() * 9000);
-
+    let otpsave=0;
     //comparing user email and sending OTP
     const findUser = async(e,email) => {
       e.preventDefault();//prevent page reload
@@ -28,9 +26,10 @@ const Login = () => {
       });
       const resData = await res.json();
       console.log(resData);
-      if(resData === 1){
-        
+      if(resData === 1){  
+      const OTP=Math.floor(1000 + Math.random() * 9000);
         console.log(OTP);
+        otpsave=OTP;
         //send OTP to user email
         const response = await fetch(`http://localhost:8000/api/send_recovery_email/${email}`, {
           method: 'POST',
@@ -56,19 +55,42 @@ const Login = () => {
       console.log('Failed to find user');
     }
   };
+  //console.log(OTP);
 
-  console.log(OTP);
   //compare OTP
-  const checkOtp = async(e) => {
-    e.preventDefault();
-    // setData({...data1, otp: data1.A+data1.B+data1.C+data1.D})
-    console.log('OTP:', OTP, otp);
-    if(OTP === otp)
-      navigate('/user/Password_Setting')
-    else
-      alert('Invalid OTP!')
-  }
+  const checkOtp = async (e) => {
+        e.preventDefault();
+        const otpCode = otp.join('');
+        console.log('Your entered OTP is:', otpCode);
 
+        try {
+            const response = await fetch('http://localhost:8000/api/compare-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, otp: otpCode })
+            });
+            const data = await response.json();
+            if (data.valid) {
+                navigate('/user/Password_Setting');
+            } else {
+                alert('Invalid OTP!');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while verifying the OTP.');
+        }
+    };
+
+    // const handleOtpChange = (e, index) => {
+    //   const value = e.target.value;
+    //   if (/^[0-9]$/.test(value)) {
+    //       const newOtp = [...otp];
+    //       newOtp[index] = value;
+    //       setOtp(newOtp);
+    //   }
+    // };
   const handleSubmit = async(e, i) => {
     e.preventDefault();
     if(isNaN(e.target.value)) return false;

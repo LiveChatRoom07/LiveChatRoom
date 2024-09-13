@@ -20,6 +20,7 @@ require('./db/connection');
 const Users = require('./Models/Users');
 const messages = require('./Models/Messages');
 const conversations = require('./Models/Conversations');
+//const Otp = require('./Models/Otp'); 
 
 //app use
 const app = express();
@@ -255,6 +256,23 @@ app.post('/api/send_recovery_email/:email', async(req, res) => {
         res.status(500).send({ message: 'Failed to send recovery email', error });
     }
   });
+
+// Compare OTP
+// app.post('/api/compare-otp', async (req, res) => {
+//     const { email, otp } = req.body;
+
+//     try {
+//         const storedOtp = await Otp.findOne({ email, otp });
+//         if (storedOtp && storedOtp === otp) {
+//             res.json({ valid: true });
+//         } else {
+//             res.json({ valid: false });
+//         }
+//     } catch (error) {
+//         console.error('Error comparing OTP:', error);
+//         res.status(500).json({ valid: false, error: 'Internal Server Error' });
+//     }
+// });
 
 //conversation Routes_store convo_id
 app.post('/api/conversation', async(req, res) => {
