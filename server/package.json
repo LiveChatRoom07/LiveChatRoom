@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "export PATH=\\ChatApp\\server\\node_modules\\.bin:$PATH && npm run dev",
+    "dev": "export PATH=\\ChatApp\\server\\node_modules\\.bin:$PATH && npm start",
     "build": "npm i"
   },
   "keywords": [],
