@@ -1,7 +1,4 @@
 {
-  "scripts": {
-    "dev": "nodemon app.js"
-  },
   "dependencies": {
     "nodemailer": "^6.9.14",
     "npx": "^10.2.2",
