@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Login.css';
 import Input from '../../components/Input/Input.js';
 import Button from '../../components/Buttons/Button';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
@@ -64,7 +64,7 @@ const Login = () => {
         const otpCode = otp.join('');
         console.log('Your entered OTP is:', otpCode);
         console.log('Your Saved OTP is:', otpsave);
-        if(otpCode == otpsave)
+        if(otpCode === otpsave)
         {
           navigate('/user/Password_Setting');
         }
