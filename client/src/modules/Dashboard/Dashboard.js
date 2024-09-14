@@ -8,7 +8,8 @@ import { io } from 'socket.io-client';
 
 export const Dashboard = () => {
 
-    let lastmessage;
+    // let lastmessage;
+    // lastmessage = data.message;
 
     const [msgsent, setMsgSent] = useState('');
     const handlemsg = (e) => {
@@ -140,10 +141,10 @@ export const Dashboard = () => {
             body: JSON.stringify(data)
         });
         setMsgSent('');
-        lastmessage = data.message;
     }
+    var input = document.getElementById("myInput");
 
-  return (
+return (
     <>
     <div className='dashobord-content'>
         {/* connections-list */}
@@ -154,7 +155,7 @@ export const Dashboard = () => {
                 </div>
                 <div className='profileinfo'>
                     <h1 className='username'>{user?.username}</h1>
-                    <p className='bio'>I am bookworm & I love rain!</p>
+                    <p className='bio'>Your Bio..</p>
                 </div>
             </div> 
             <div className='myconnections'>
@@ -240,8 +241,8 @@ export const Dashboard = () => {
                     messages?.receiver?.username &&
                     <div className='chat-footer'>
                         <div className='type-message'>
-                            <Input type='text' placeholder='Type a message...' isrequired={false} length='500' value={msgsent} onChange={handlemsg} name='typebox' />
-                            <button className={` sendmsg${!msgsent ? "disablebutton" : ""}`} type='submit' onClick={()=> sendMessage()}><img src={send} alt='send button'/></button>
+                            <Input type='text' placeholder='Type a message...' isrequired={false} length='500' value={msgsent} onChange={handlemsg} name='typebox' onKeyDown={(e) => {if (e.key === 'Enter') {e.preventDefault(); sendMessage()}}}/>
+                            <button className={` sendmsg${!msgsent ? "disablebutton" : ""}`} type='submit' onClick={()=> sendMessage()} ><img src={send} alt='send button'/></button>
                         </div>
                     </div>
                 }
