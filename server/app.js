@@ -19,8 +19,8 @@ require('./db/connection');
 
 //import files
 const Users = require('./Models/Users');
-const messages = require('./Models/Messages');
-const conversations = require('./Models/Conversations');
+const messages = require('./Models/messages');
+const conversations = require('./Models/conversations');
 //const Otp = require('./Models/Otp'); 
 
 //app use
