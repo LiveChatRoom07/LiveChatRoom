@@ -40,7 +40,7 @@ export const Dashboard = () => {
         //get all active users
         socket?.on('getUsers', activeUsers => {
             setActiveUsers(activeUsers)
-            // console.log('Active User:>>', activeUsers);
+            console.log('Active User:>>', activeUsers);
         })
 
         //get messages
