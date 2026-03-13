@@ -1,0 +1,57 @@
+
+/* Main Container */
+.box{
+    width: 500px;
+    height: 600px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Welcome box */
+.heading{
+    font-family: Merienda;
+    font-size: 2rem;
+}
+.text{
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+
+/* Alternative page text */
+.signin-text{
+    margin-top: 15px;
+    font-size: 0.85rem;
+}
+
+
+/* Alternative option */
+.signin{
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
+.signin:hover,.password-text:hover{
+    cursor: pointer;
+}
+
+
+/* forgot-password */
+.password-text{
+    margin-left: 175px;
+    margin-bottom: 25px;
+    font-size: 0.75rem;
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
+/* SignIn/LogIn button */
+.box button{
+    width: 50%;
+    margin-left: 70px;
+}

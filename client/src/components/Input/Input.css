@@ -1,0 +1,23 @@
+
+/* input box */
+.sub-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 15px;
+    font-size: 0.9rem;
+}
+
+/* Input field */
+.input{
+    
+    background-color: var(--disable);
+    border-radius: 5px;
+    padding: 0.5rem;
+    border: 1px solid var(--disable);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    color: var(--text);
+    width: 15rem;
+    outline: none;
+    margin-top: 5px;
+}
